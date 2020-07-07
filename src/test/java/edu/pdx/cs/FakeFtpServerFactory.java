@@ -1,0 +1,80 @@
+package edu.pdx.cs;
+
+import org.mockftpserver.fake.FakeFtpServer;
+import org.mockftpserver.fake.UserAccount;
+import org.mockftpserver.fake.filesystem.*;
+import java.util.Collections;
+
+public class FakeFtpServerFactory {
+
+    /**
+     * FakeFtpServer factory function generally following guidelines documented in {@link FakeFtpServer}
+     * @return
+     */
+    public static FakeFtpServer createServer() {
+        FakeFtpServer server = new FakeFtpServer();
+
+        UserAccount aang_user = new UserAccount("aang", "katara", "aang");
+        aang_user.setGroups(Collections.singletonList("users"));
+
+        UserAccount bumi_user = new UserAccount("bumi", "password", "bumi");
+        bumi_user.setGroups(Collections.singletonList("users"));
+
+        FileSystem fileSystem = new UnixFakeFileSystem();
+        DirectoryEntry root = new DirectoryEntry("/");
+        root.setPermissions(new Permissions("rw-r--r--"));
+        root.setOwner("aang");
+        root.setGroup("users");
+
+        DirectoryEntry data = new DirectoryEntry("/data");
+        data.setPermissions(new Permissions("rw-rw-r--"));
+        data.setOwner("aang");
+        data.setGroup("users");
+
+        DirectoryEntry aang = new DirectoryEntry("/data/aang");
+        aang.setPermissions(new Permissions("rw-r--r--"));
+        aang.setOwner("aang");
+        aang.setGroup("users");
+
+        DirectoryEntry bumi = new DirectoryEntry("/data/bumi");
+        bumi.setPermissions(new Permissions("rw-rw-r--"));
+        bumi.setOwner("bumi");
+        bumi.setGroup("users");
+
+        FileEntry file1 = new FileEntry("/.secrets", "how did you find this?");
+        file1.setPermissions(new Permissions("rw-rw----"));
+        file1.setOwner("bumi");
+        file1.setGroup("users");
+
+        FileEntry file2 = new FileEntry("/data/aang/love_note", "oh sokka, you always make me giggle!");
+        file2.setPermissions(new Permissions("rwxr-xr-x"));
+        file2.setOwner("aang");
+        file2.setGroup("users");
+
+        FileEntry file3 = new FileEntry("/data/aang/momo.gif", "animation of momo eating pie");
+        file3.setPermissions(new Permissions("rw-r--r--"));
+        file3.setOwner("aang");
+        file3.setGroup("users");
+
+        FileEntry file4 = new FileEntry("/data/bumi/my_cabbages.wav", "myyyyyyyyyy cabbaggeeeeeeeeessssss!!!!");
+        file4.setPermissions(new Permissions("r--r--r--"));
+        file4.setOwner("bumi");
+        file4.setGroup("users");
+
+        fileSystem.add(root);
+        fileSystem.add(data);
+        fileSystem.add(aang);
+        fileSystem.add(bumi);
+        fileSystem.add(file1);
+        fileSystem.add(file2);
+        fileSystem.add(file3);
+        fileSystem.add(file4);
+
+        server.setFileSystem(fileSystem);
+        server.addUserAccount(aang_user);
+        server.addUserAccount(bumi_user);
+        server.setServerControlPort(0);
+
+        return server;
+    }
+}
