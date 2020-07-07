@@ -5,6 +5,12 @@ import org.mockftpserver.fake.UserAccount;
 import org.mockftpserver.fake.filesystem.*;
 import java.util.Collections;
 
+/**
+ * FakeFtpServer is part of the MockFtpServer project. This factory constructs a FakeFtpServer
+ * consistent with the examples in the documentation.
+ * Documentation & source code available at: http://mockftpserver.sourceforge.net/
+ * Licensed under Apache License v2.0 https://apache.org/licenses/LICENSE-2.0.html
+ */
 public class FakeFtpServerFactory {
 
     /**
