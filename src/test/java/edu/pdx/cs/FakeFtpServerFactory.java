@@ -9,7 +9,22 @@ public class FakeFtpServerFactory {
 
     /**
      * FakeFtpServer factory function generally following guidelines documented in {@link FakeFtpServer}
-     * @return
+     *
+     * Creates a Unix server with two users:
+     *
+     *  aang    / katara
+     *  bumi    / password
+     *
+     * There are also several directories created with the following directory structure:
+     *  dir                         - permissions   - description
+     *  /                           - rw-r--r--     - root dir
+     *  /.secrets                   - rw-rw----     - text file
+     *  /data                       - rw-rw-r--     - dir
+     *  /data/aang                  - rw-r--r--     - dir
+     *  /data/aang/love_note        - rwxr-xr-x     - text file
+     *  /data/aang/momo.gif         - rw-r--r--     - text file
+     *  /data/bumi                  - rw-rw-r--     - dir
+     *  /data/bumi/my_cabbages.wav  - r--r--r--     - text file
      */
     public static FakeFtpServer createServer() {
         FakeFtpServer server = new FakeFtpServer();
