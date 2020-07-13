@@ -1,7 +1,7 @@
 package edu.pdx.cs;
 
 /**
- *
+ * This should be implemented as Command Design Pattern
  */
 public enum Command {
     GETFILE,
