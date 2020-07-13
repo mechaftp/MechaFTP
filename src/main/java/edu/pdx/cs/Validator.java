@@ -4,6 +4,9 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Contains methods for validating i
+ */
 public class Validator {
     Boolean validatePath(String path) {
         try {
@@ -17,4 +20,5 @@ public class Validator {
         }
         return true;
     }
+
 }

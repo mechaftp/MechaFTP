@@ -18,7 +18,7 @@ public class IOHandler {
         bufferedReader.readLine();
 
 
-        return Command.UNKNOWN;
+        return null;
 
     }
 }
