@@ -27,6 +27,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>net.sourceforge.argparse4j</groupId>
+      <artifactId>argparse4j</artifactId>
+      <version>0.8.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.mockftpserver</groupId>
       <artifactId>MockFtpServer</artifactId>
       <version>2.7.1</version>
