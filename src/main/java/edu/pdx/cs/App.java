@@ -32,10 +32,9 @@ public class App {
             for (String arg : namespace.getAttrs().keySet()) {
                 switch (arg) {
                     case "logfile":
-                        if (!validator.validateLog((String) namespace.getAttrs().get(arg))) {
-                            System.out.println("Invalid log arg");
+                        if (!validator.validatePath((String) namespace.getAttrs().get(arg))) {
+                            System.out.println("Invalid log argument");
                         } else {
-                            System.out.println("valid arg");
                             client.setLogfile(Paths.get((String) namespace.get(arg)));
                         }
                         break;

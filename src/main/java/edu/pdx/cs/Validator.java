@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Validator {
-    Boolean validateLog(String path) {
+    Boolean validatePath(String path) {
         try {
             Path logPath = Paths.get(path);
             File file = logPath.toFile();

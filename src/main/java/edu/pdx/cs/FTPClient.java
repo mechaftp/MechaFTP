@@ -8,6 +8,7 @@ import java.nio.file.Path;
 public class FTPClient {
 
     Path logpath;
+    IOHandler ioHandler = new IOHandler();
 
     void setLogfile(Path logpath) {
         this.logpath = logpath;
@@ -19,6 +20,12 @@ public class FTPClient {
 
     void run() {
         while(true) {
+            try {
+                ioHandler.getInput();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             break;
         }
         //cleanup

@@ -1,13 +1,17 @@
 package edu.pdx.cs;
 
+/**
+ *
+ */
 public enum Command {
-    GetFile,
-    GetMultiple,
-    Login,
-    Logoff,
-    ListDir,
-    PostFile,
-    PostMultiple,
-    RenameFile,
-    RenameLocal
+    GETFILE,
+    GETMULTIPLE,
+    LOGIN,
+    LOGOFF,
+    LISTDIR,
+    POSTFILE,
+    POSTMULTIPLE,
+    RENAMEFILE,
+    RENAMELOCAL,
+    UNKNOWN
 }
