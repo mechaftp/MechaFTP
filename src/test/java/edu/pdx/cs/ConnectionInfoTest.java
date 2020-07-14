@@ -9,12 +9,7 @@ import java.util.regex.Pattern;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class ConnectionInfoTest extends InvokeMainTestCase{
-
-
-    private InvokeMainTestCase. MainMethodResult invokeMain(String... args) {
-        return invokeMain(App.class, args);
-    };
+public class ConnectionInfoTest{
 
 
 
@@ -40,7 +35,6 @@ public class ConnectionInfoTest extends InvokeMainTestCase{
     @Test
     public void IsValidIPV4(){
 
-        // MainMethodResult result = invokeMain(new String[] {"Directory path" "IP" "22" "username" });
         ConnectionInfo connection = new ConnectionInfo(Paths.get("Path"), "12.16.254.11", "22", "aang");
 
         String upperbound255 = "(\\d{1,2}|(0|1)\\" + "d{2}|2[0-4]\\d|25[0-5])";
@@ -67,7 +61,7 @@ public class ConnectionInfoTest extends InvokeMainTestCase{
     @Test
     public void IsValidusername()
     {
-        // MainMethodResult connection = invokeMain(new String[] {"Directory path" "IP" "22" "username" });
+
         ConnectionInfo connection = new ConnectionInfo(Paths.get("Path"), "12.16.254.11", "22", "aang");
 
         Pattern p = Pattern.compile("^[A-Za-z][A-Za-z0-9]*$");
