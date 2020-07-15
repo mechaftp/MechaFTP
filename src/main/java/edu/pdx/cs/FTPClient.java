@@ -21,6 +21,7 @@ public class FTPClient {
     }
 
     void run() {
+        /*
         while(true) {
             try {
                 ioHandler.getInput();
@@ -30,6 +31,8 @@ public class FTPClient {
 
             break;
         }
+        */
+        
         //cleanup
     }
 
