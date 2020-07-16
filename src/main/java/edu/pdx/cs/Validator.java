@@ -5,20 +5,27 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Contains methods for validating i
+ * Contains methods for validating user input
  */
 public class Validator {
-    Boolean validatePath(String path) {
+
+    /**
+     * Determines whether or not the path passed in as an argument is valid
+     * @param path <code>String</code> object containing the code
+     * @return true if path is valid, false otherwise
+     */
+    protected boolean validatePath(String path) {
+        boolean valid = true;
+
         try {
             Path logPath = Paths.get(path);
             File file = logPath.toFile();
-            if (!file.exists()) {
-                return false;
-            }
+            if (!file.exists())
+                valid = false;
         } catch (InvalidPathException | NullPointerException ex) {
-            return false;
+            valid = false;
         }
-        return true;
-    }
 
+        return valid;
+    }
 }

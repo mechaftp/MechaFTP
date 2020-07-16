@@ -98,4 +98,8 @@ public class FakeFtpServerFactory {
 
         return server;
     }
+
+    public static boolean login(){
+        return false;
+    }
 }
