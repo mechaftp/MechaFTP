@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class LoginCommandTest {
     @Test
     public void verifyExecuteReturnValue(){
-        assertThat(Command.class.execute(), equalTo(0));
+        LoginCommand Login = new LoginCommand();
+        assertThat(Login.execute(), equalTo(0));
     }
 }
