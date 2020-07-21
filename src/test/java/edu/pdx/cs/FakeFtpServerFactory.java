@@ -94,7 +94,9 @@ public class FakeFtpServerFactory {
         server.setFileSystem(fileSystem);
         server.addUserAccount(aang_user);
         server.addUserAccount(bumi_user);
-        server.setServerControlPort(0);
+        server.setServerControlPort(8080);
+
+        server.start();
 
         return server;
     }
