@@ -30,9 +30,6 @@ public class App {
         parser.addArgument("-l", "--logfile")
                 .setDefault(Paths.get("Logs/"));
 
-
-
-
         try {
             Namespace namespace = parser.parseArgs(args);
             for (String arg : namespace.getAttrs().keySet()) {
