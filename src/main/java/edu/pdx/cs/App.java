@@ -19,19 +19,9 @@ public class App {
 
     static Client client = new Client();
     static Validator validator = new Validator();
-    private static Logger logger = LogManager.getLogger(Log4jExample.class);
 
     public static void main(String[] args) {
-
-        logger.debug("Debug log message");
-        logger.info("Info log message");
-        logger.error("Error log message");
-
         run(args);
-
-
-
-
     }
 
     public static void run(String[] args) {

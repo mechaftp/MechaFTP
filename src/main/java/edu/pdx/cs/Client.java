@@ -1,15 +1,14 @@
 package edu.pdx.cs;
-//import jdk.nashorn.internal.ir.Block;
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.BlockingQueue;
-import java.util.*;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class Client {
 
+    private static Logger logger = LogManager.getLogger(Log4jExample.class);
     Path logpath;
     IOHandler ioHandler = new IOHandler();
     FTPClient ftp = new FTPClient();
@@ -19,7 +18,13 @@ public class Client {
     }
 
     protected boolean login (String username, String password) throws IOException {
-        return ftp.login(username, password);
+        boolean status = ftp.login(username, password);
+        if (status) {
+            logger.info("Logged in as: ", username);
+        } else {
+            logger.error("Failed login for: ", username);
+        }
+        return status;
     }
 
     void setLogfile(Path logpath) {
