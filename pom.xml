@@ -6,10 +6,9 @@
   <groupId>edu.pdx.cs</groupId>
   <artifactId>mechaftp</artifactId>
   <version>0.1.0</version>
-
   <name>mechaftp</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/mechaftp/MechaFTP</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -104,4 +103,16 @@
       </plugins>
     </pluginManagement>
   </build>
+  <reporting>
+    <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <show>public</show>
+          </configuration>
+        </plugin>
+    </plugins>
+  </reporting>
 </project>
