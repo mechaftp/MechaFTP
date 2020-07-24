@@ -46,3 +46,6 @@ buildNumber.properties
 .project
 .settings/
 .vscode/
+
+# Build output
+mechaftp/
