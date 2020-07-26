@@ -7,6 +7,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.PrintStream;
 import java.nio.file.Paths;
 
 import static java.lang.System.exit;
@@ -21,24 +22,26 @@ public class App {
     static Validator validator = new Validator();
     private static Logger logger = LogManager.getLogger(Log4jExample.class);
 
+    private static String APP_NAME = "MechaFTP";
+
     public static void main(String[] args) {
 
         logger.debug("Debug log message");
         logger.info("Info log message");
         logger.error("Error log message");
 
+
+
         run(args);
-
-
-
-
     }
 
     public static void run(String[] args) {
         ArgumentParser parser = ArgumentParsers.newFor("FTPClient").build()
                 .description("FTPClient for Agile");
         parser.addArgument("-l", "--logfile")
-                .setDefault(Paths.get("Logs/"));
+                .setDefault(Paths.get("Logs/"))
+                .help("set the location of the log files");
+
 
 
 
