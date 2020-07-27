@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import static org.fusesource.jansi.Ansi.*;
@@ -48,11 +47,14 @@ public class CLIStatusBar implements Closeable
             this.remoteCwd.toString();
         String status = String.format("%1$-38s  %2$38s", localCwdString, remoteCwdString);
 
-        out.println(ansi().a("╔ ")
+        out.println(ansi()
+            .fg(Color.CYAN).a("╔ ")
             .fg(Color.GREEN).a("[local] ")
             .fg(Color.WHITE).a(status)
             .fg(Color.GREEN).a(" [remote] ")
-            .reset().a("╗"));
+            .fg(Color.CYAN).a("╗")
+            .reset()
+        );
     }
 
     public void close()

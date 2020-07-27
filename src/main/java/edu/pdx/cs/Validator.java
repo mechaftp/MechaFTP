@@ -28,4 +28,6 @@ public class Validator {
 
         return valid;
     }
+
+    protected boolean dummyValidate() { return true; }
 }

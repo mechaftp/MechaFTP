@@ -7,6 +7,8 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.UnknownHostException;
 import java.nio.file.Path;
@@ -14,13 +16,16 @@ import java.nio.file.Paths;
 
 public class MechaFTP
 {
-    public static PrintStream out = System.out;
+    public static PrintStream out;
 
+    private static CLIStatusBar statusBar;
     private static Connection currentConnection;
+    private static IOHandler ioHandler;
 
     public static void main(String[] args)
     {
         configureStartup(args);
+
         run();
 
         cleanup();
@@ -28,13 +33,13 @@ public class MechaFTP
 
     private static void run()
     {
-        CLIStatusBar statusBar = CLIStatusBar.create(System.out, "not connected...");
+        statusBar = CLIStatusBar.create(System.out, "not connected...");
         statusBar.setRemoteCwd("/data/aang");
 
         statusBar.render();
 //        while(true)
 //        {
-//
+//            ioHandler.getInput();
 //            if (quitting)
 //                break;
 //        }
@@ -46,8 +51,9 @@ public class MechaFTP
 
         try
         {
+            out = cliArgs.get("logger");
+            ioHandler = new IOHandler();
             currentConnection = new Connection(cliArgs.get("host"), (Integer) cliArgs.get("port"));
-            out.println("Connecting to " + currentConnection);
         }
         catch (UnknownHostException e)
         {
@@ -57,7 +63,7 @@ public class MechaFTP
 
     private static void cleanup()
     {
-
+        statusBar.close();
     }
 
 
@@ -65,7 +71,7 @@ public class MechaFTP
     private static Namespace parseStartup(String[] args)
     {
         ArgumentParser parser = ArgumentParsers
-            .newFor("mechaftp")
+            .newFor("MechaFTP")
             .build()
             .version("${prog} v0.1.0");
         parser.addArgument("host")
@@ -77,6 +83,11 @@ public class MechaFTP
             .setDefault(20);
         parser.addArgument("--version")
             .action(Arguments.version());
+        parser.addArgument("--logger")
+            .help("Set the logger output destination")
+            .type(PrintStream.class)
+            .nargs("?")
+            .setDefault(System.out);
 
         try
         {
@@ -88,6 +99,4 @@ public class MechaFTP
             return null;
         }
     }
-
-
 }
