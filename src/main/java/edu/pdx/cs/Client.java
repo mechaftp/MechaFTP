@@ -1,17 +1,21 @@
 package edu.pdx.cs;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class Client
-{
-    public static Logger logger = LogManager.getLogger(Log4jExample.class);
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+public class Client {
+
+    private static Logger logger = LogManager.getLogger(Log4jExample.class);
     Path logpath;
-    IOHandler ioHandler = new IOHandler(this);
     FTPClient ftp = new FTPClient();
+  
+    protected void connect (String server, int port) throws IOException {
+        ftp.connect(server, port);
+    }
 
     /**
      * Logs users into the FTP server
@@ -20,7 +24,7 @@ public class Client
      * @return true if login is successful, false otherwise
      * @throws IOException
      */
-    public boolean login (String username, String password) throws IOException {
+    protected boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
             logger.info("Logged in as: ", username);
@@ -56,3 +60,4 @@ public class Client
 
 
 }
+

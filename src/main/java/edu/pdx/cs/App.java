@@ -19,30 +19,19 @@ public class App {
 
     static Client client = new Client();
     static Validator validator = new Validator();
-    private static Logger logger = LogManager.getLogger(Log4jExample.class);
 
     private static String APP_NAME = "MechaFTP";
 
     public static void main(String[] args) {
-
-        logger.debug("Debug log message");
-        logger.info("Info log message");
-        logger.error("Error log message");
-
-
-
         run(args);
     }
 
     public static void run(String[] args) {
-        ArgumentParser parser = ArgumentParsers.newFor("FTPClient").build()
-                .description("FTPClient for Agile");
+        ArgumentParser parser = ArgumentParsers.newFor("Client").build()
+                .description("Client for Agile");
         parser.addArgument("-l", "--logfile")
                 .setDefault(Paths.get("Logs/"))
                 .help("set the location of the log files");
-
-
-
 
 
         try {
