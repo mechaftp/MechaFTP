@@ -5,14 +5,12 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
-
-
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.UnknownHostException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import static org.fusesource.jansi.Ansi.ansi;
+import static org.fusesource.jansi.Ansi.Color.CYAN;
+import static org.fusesource.jansi.Ansi.Color.WHITE;
 
 public class MechaFTP
 {
@@ -41,7 +39,7 @@ public class MechaFTP
         while(true)
         {
             statusBar.render();
-            out.print(" mechaftp > ");
+            out.print(ansi().fgCyan().a("╚").reset().a(" mechaftp > ").reset());
 
             ioHandler.readInput();
             ioHandler.parseInput();
