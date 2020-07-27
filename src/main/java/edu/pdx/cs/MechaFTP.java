@@ -21,6 +21,7 @@ public class MechaFTP
     private static CLIStatusBar statusBar;
     private static Connection currentConnection;
     private static IOHandler ioHandler;
+    private static Client client;
 
     public static void main(String[] args)
     {
@@ -33,16 +34,21 @@ public class MechaFTP
 
     private static void run()
     {
-        statusBar = CLIStatusBar.create(System.out, "not connected...");
+        statusBar = CLIStatusBar.create(System.out);
         statusBar.setRemoteCwd("/data/aang");
 
-        statusBar.render();
-//        while(true)
-//        {
-//            ioHandler.getInput();
-//            if (quitting)
-//                break;
-//        }
+
+        while(true)
+        {
+            statusBar.render();
+            out.print(" mechaftp > ");
+
+            ioHandler.readInput();
+            ioHandler.parseInput();
+
+            if (ioHandler.quitting)
+                break;
+        }
     }
 
     private static void configureStartup(String[] args)
@@ -51,8 +57,9 @@ public class MechaFTP
 
         try
         {
+            client = new Client();
             out = cliArgs.get("logger");
-            ioHandler = new IOHandler();
+            ioHandler = new IOHandler(client);
             currentConnection = new Connection(cliArgs.get("host"), (Integer) cliArgs.get("port"));
         }
         catch (UnknownHostException e)

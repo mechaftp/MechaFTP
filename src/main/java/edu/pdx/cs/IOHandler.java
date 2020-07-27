@@ -18,19 +18,33 @@ public class IOHandler {
     private ArgumentParser parser;
     private Namespace namespace;
     private List<String> tokens;
-    private Boolean validInput;
+    private Client client;
+    private boolean validInput;
+    public boolean quitting;
 
 
-    IOHandler() {
-        parser = ArgumentParsers.newFor("MechaFTP")
+    IOHandler(Client client) {
+        this.client = client;
+
+        parser = configureArgParser();
+    }
+
+
+
+
+    private ArgumentParser configureArgParser()
+    {
+        ArgumentParser parse = ArgumentParsers.newFor("MechaFTP")
             .addHelp(true)
             .build()
             .description("FTPClient for Agile");
-        parser.addArgument( "--login")
+        parse.addArgument( "--login")
             .nargs(2)
             .help("--login username password");
-        parser.addArgument("--quit")
+        parse.addArgument("--quit")
             .help("quit MechaFTP");
+
+        return parse;
     }
 
     /**
@@ -77,14 +91,22 @@ public class IOHandler {
         }
     }
 
-    public Command parseInput()
+    //TODO: The command factory needs to pass around a reference to the Client, but we don't want to instantiate clients
+    // all over the place, and we want to avoid passing the client everywhere too. What's a better pattern for this?
+    public ICommand parseInput()
     {
-        Command command;
-        switch (tokens.get(0))
+        ICommand command;
+        List<String> subarguments = tokens.subList(1, tokens.size());
+        switch (tokens.get(0).toLowerCase())
         {
             case "login":
                 expectNSubarguments(2);
-                //command = CommandFactory
+                command = CommandFactory.createLogin(client);
+                command.assignInput(subarguments);
+                break;
+            case "quit":
+                quitting = true;
+                break;
         }
         return null;
     }
@@ -92,6 +114,6 @@ public class IOHandler {
     private void expectNSubarguments(int N)
     {
         if (this.tokens.size() != N+1)
-            validInput = false;
+            throw new IllegalArgumentException("Wrong number of arguments.");
     }
 }

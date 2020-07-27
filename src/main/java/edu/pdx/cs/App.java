@@ -7,7 +7,6 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.PrintStream;
 import java.nio.file.Paths;
 
 import static java.lang.System.exit;
@@ -18,7 +17,7 @@ import static java.lang.System.exit;
  */
 public class App {
 
-    static FTPClient client = new FTPClient();
+    static Client client = new Client();
     static Validator validator = new Validator();
     private static Logger logger = LogManager.getLogger(Log4jExample.class);
 

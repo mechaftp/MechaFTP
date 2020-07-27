@@ -21,11 +21,10 @@ public class CLIStatusBar implements Closeable
         this.localCwd = Paths.get(System.getProperty("user.dir"));
     }
 
-    public static CLIStatusBar create(PrintStream out, String remoteCwd)
+    public static CLIStatusBar create(PrintStream out)
     {
         AnsiConsole.systemInstall();
         CLIStatusBar bar = new CLIStatusBar(out);
-        bar.setRemoteCwd(remoteCwd);
         return bar;
     }
 
