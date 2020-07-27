@@ -13,7 +13,7 @@ public class Client {
     Path logpath;
     FTPClient ftp = new FTPClient();
   
-    protected void connect (String server, int port) throws IOException {
+    public void connect (String server, int port) throws IOException {
         ftp.connect(server, port);
     }
 
@@ -24,7 +24,7 @@ public class Client {
      * @return true if login is successful, false otherwise
      * @throws IOException
      */
-    protected boolean login (String username, String password) throws IOException {
+    public boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
             logger.info("Logged in as: ", username);
