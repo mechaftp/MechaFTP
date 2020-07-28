@@ -24,7 +24,6 @@ public class IOHandler {
                 .help("--login username password");
     }
 
-
     /**
      * This should use argparse4j
      * @return

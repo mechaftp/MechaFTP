@@ -22,16 +22,7 @@ public class App {
     private static Logger logger = LogManager.getLogger(Log4jExample.class);
 
     public static void main(String[] args) {
-
-        logger.debug("Debug log message");
-        logger.info("Info log message");
-        logger.error("Error log message");
-
         run(args);
-
-
-
-
     }
 
     public static void run(String[] args) {
@@ -39,9 +30,6 @@ public class App {
                 .description("FTPClient for Agile");
         parser.addArgument("-l", "--logfile")
                 .setDefault(Paths.get("Logs/"));
-
-
-
 
         try {
             Namespace namespace = parser.parseArgs(args);
