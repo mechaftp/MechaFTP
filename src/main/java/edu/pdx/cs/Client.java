@@ -1,7 +1,8 @@
 package edu.pdx.cs;
-import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.*;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +36,70 @@ public class Client {
 
     void setLogfile(Path logpath) {
         this.logpath = logpath;
+    }
+
+    /**
+     * Lists directories on remote server
+     * @return an array of <code>FTPFile</code> objects
+     */
+    protected FTPFile[] listRemoteDirectories(){
+        FTPFile[] directories = null;
+
+        try {
+            directories = ftp.listDirectories();
+        } catch (IOException e) {
+            System.err.println("\nIO Error\n");
+            e.printStackTrace();
+        }
+
+        return directories;
+    }
+
+    /**
+     * Lists files on remote server
+     * @return an array of <code>FTPFile</code> objects
+     */
+    protected FTPFile[] listRemoteFiles(){
+        FTPFile[] files = null;
+
+        try {
+            files = ftp.listFiles();
+        } catch (IOException e) {
+            System.err.println("\nIO Error\n");
+            e.printStackTrace();
+        }
+
+        return files;
+    }
+
+    /**
+     * Converts names of <code>FTPFile</code> objects to strings
+     * @param files array of <code>FTPFiles</code> objects
+     * @return <code>ArrayList</code> of names in <code>String</code> format
+     */
+    protected ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
+       ArrayList<String> names = null;
+
+       for(FTPFile file:files)
+           names.add(file.getName());
+
+       return names;
+    }
+
+    /**
+     * Changes the working directory...
+     * @param path ...to the given file path
+     * @return true if the path change was successful, false otherwise
+     */
+    protected boolean changeDirectory(String path){
+        boolean success = false;
+        try {
+            success = ftp.changeWorkingDirectory(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return success;
     }
 
     void postFile(Path serverPath, Path toUpload) {
