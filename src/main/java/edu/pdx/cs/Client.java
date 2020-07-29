@@ -57,5 +57,12 @@ public class Client {
         //cleanup
     }
 
+    void logout(String username)throws IOException{
+        logger.info("User: ", username);
+        logger.info(" is logging out!");
+        ftp.disconnect();
+        System.exit(1);
+    }
+
 
 }
