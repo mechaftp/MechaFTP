@@ -35,10 +35,10 @@ public class FakeFtpServerFactory {
     public static FakeFtpServer createServer() {
         FakeFtpServer server = new FakeFtpServer();
 
-        UserAccount aang_user = new UserAccount("aang", "katara", "aang");
+        UserAccount aang_user = new UserAccount("aang", "katara", "/data/aang");
         aang_user.setGroups(Collections.singletonList("users"));
 
-        UserAccount bumi_user = new UserAccount("bumi", "password", "bumi");
+        UserAccount bumi_user = new UserAccount("bumi", "password", "/data/bumi");
         bumi_user.setGroups(Collections.singletonList("users"));
 
         FileSystem fileSystem = new UnixFakeFileSystem();
@@ -99,7 +99,4 @@ public class FakeFtpServerFactory {
         return server;
     }
 
-    public static boolean login(){
-        return false;
-    }
 }

@@ -12,7 +12,7 @@ public class CLParseTest {
 
     @After
     public void teardown() {
-        App.client = new FTPClient();
+        App.client = new Client();
     }
 
     @Test
