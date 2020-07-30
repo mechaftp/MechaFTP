@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 public class IOHandler {
-
     private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private Validator validator = new Validator();
     private ArgumentParser parser;
@@ -28,9 +27,6 @@ public class IOHandler {
 
         parser = configureArgParser();
     }
-
-
-
 
     private ArgumentParser configureArgParser()
     {
@@ -110,6 +106,7 @@ public class IOHandler {
         }
         return null;
     }
+
 
     private void expectNSubarguments(int N)
     {
