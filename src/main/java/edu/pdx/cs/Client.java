@@ -39,35 +39,27 @@ public class Client {
     }
 
     /**
-     * Lists directories on remote server
+     * Lists directories w/in the current working directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteDirectories(){
-        FTPFile[] directories = null;
-
-        try {
-            directories = ftp.listDirectories();
-        } catch (IOException e) {
-            System.err.println("\nIO Error\n");
-            e.printStackTrace();
-        }
-
-        return directories;
+    protected FTPFile[] listRemoteDirectories() throws IOException {
+        String path = ftp.printWorkingDirectory();
+        return ftp.listDirectories(path);
     }
 
     /**
-     * Lists files on remote server
+     * Lists files w/in the current directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteFiles(){
-        FTPFile[] files = null;
+    protected FTPFile[] listRemoteFiles() throws IOException{
+        String path = ftp.printWorkingDirectory();
 
-        try {
-            files = ftp.listFiles();
-        } catch (IOException e) {
-            System.err.println("\nIO Error\n");
-            e.printStackTrace();
-        }
+        FTPFile[] files =  ftp.listFiles(path, new FTPFileFilter() {
+            @Override
+            public boolean accept(FTPFile ftpFile) {
+                return !ftpFile.isDirectory();
+            }
+        });
 
         return files;
     }
@@ -87,12 +79,22 @@ public class Client {
     }
 
     /**
+     * Returns <code>String</code> of the current working directory
+     * @return current working directory
+     * @throws IOException
+     */
+    protected String printWorkingDirectory() throws IOException{
+        return ftp.printWorkingDirectory();
+    }
+
+    /**
      * Changes the working directory...
      * @param path ...to the given file path
      * @return true if the path change was successful, false otherwise
      */
     protected boolean changeDirectory(String path){
         boolean success = false;
+
         try {
             success = ftp.changeWorkingDirectory(path);
         } catch (IOException e) {

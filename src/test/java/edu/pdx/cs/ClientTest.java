@@ -14,6 +14,8 @@ import org.apache.commons.net.ftp.*;
 public class ClientTest {
 
     private FakeFtpServer server;
+    private static final String HOSTNAME = "localhost";
+    private static final String PORT = System.getProperty("http.port", "8080");
 
     @Before
     public void init() {
@@ -22,12 +24,12 @@ public class ClientTest {
     }
 
     @Test
-    public void testGetServerControlPort(){
-        assertThat(server.getServerControlPort(), equalTo(8080));
+    public void testGetServerControlPort() {
+        assertThat(server.getServerControlPort(), equalTo(Integer.parseInt(PORT)));
     }
 
     @Test
-    public void testGetUserInfo(){
+    public void testGetUserInfo() {
         String username = "aang";
         String password = "katara";
 
@@ -41,33 +43,59 @@ public class ClientTest {
         String password = "katara";
 
         Client client = new Client();
-        client.connect("localhost", 8080);
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
 
         assertThat(client.login(username, password), equalTo(true));
     }
 
     @Test
-    public void testListDirectories() throws IOException{
+    public void testListRemoteDirectories() throws IOException {
         Client client = new Client();
-        client.connect("localhost", 8080);
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-        client.changeDirectory("/users/");
-
         FTPFile[] directories = client.listRemoteDirectories();
+
+        assertThat(directories.length, equalTo(1));
+        assertThat(directories[0].isDirectory(), equalTo(true));
+        assertThat(directories[0].getName(), containsString("testDir"));
+    }
+
+    @Test
+    public void testListRemoteFiles() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
         FTPFile[] files = client.listRemoteFiles();
 
-        //***debug, asserts***
-        for(FTPFile dir:directories)
-            System.out.print(dir.getName() + " ");
-        for(FTPFile file:files)
-            System.out.print(file.getName() + " ");
+        assertThat(files.length, equalTo(2));
+        assertThat(files[0].isDirectory(), equalTo(false));
+        assertThat(files[0].getName(), containsString("love_note"));
+        assertThat(files[1].isDirectory(), equalTo(false));
+        assertThat(files[1].getName(), containsString("momo.gif"));
+    }
+
+    @Test
+    public void testPrintWorkingDirectory() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("bumi", "password");
+
+        assertThat(client.printWorkingDirectory(), equalTo("/data/bumi"));
+    }
+
+    @Test
+    public void testChangeWorkingDirectory() throws IOException {
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("bumi", "password");
+
+        assertThat(client.changeDirectory("/data/bumi/testDir"), equalTo(true));
     }
 
     @After
     public void teardown() {
         server.stop();
     }
-
-
 }
