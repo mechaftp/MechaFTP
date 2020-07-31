@@ -9,41 +9,32 @@ import org.fusesource.jansi.AnsiConsole;
 
 import static org.fusesource.jansi.Ansi.*;
 
-public class CLIStatusBar implements Closeable
+public class StatusBar implements Closeable
 {
     public PrintStream out;
-    public Path localCwd;
-    public Path remoteCwd;
 
-    private CLIStatusBar(PrintStream out)
+    private StatusBar(PrintStream out)
     {
         this.out = out;
-        this.localCwd = Paths.get(System.getProperty("user.dir"));
     }
 
-    public static CLIStatusBar create(PrintStream out)
+    public static StatusBar create(PrintStream out)
     {
         AnsiConsole.systemInstall();
-        CLIStatusBar bar = new CLIStatusBar(out);
-        return bar;
+        return new StatusBar(out);
     }
 
-    public void setRemoteCwd(String remoteCwd)
+    public void render(ClientState state)
     {
-        this.remoteCwd = Paths.get(remoteCwd);
-    }
 
-    public void render()
-    {
-        this.localCwd.toAbsolutePath().toString();
-        int localLen = this.localCwd.toString().length();
-        int remoteLen = this.remoteCwd.toString().length();
+        int localLen = state.getLocalCwdString().length();
+        int remoteLen = state.getRemoteCwdString().length();
         String localCwdString = localLen > 35 ?
-            "..." + this.localCwd.toString().substring(localLen - 32) :
-            this.localCwd.toString();
+            "..." + state.getLocalCwdString().substring(localLen - 32) :
+            state.getLocalCwd().toString();
         String remoteCwdString = remoteLen > 33 ?
-            "..." + this.remoteCwd.toString().substring(remoteLen - 30) :
-            this.remoteCwd.toString();
+            "..." + state.getRemoteCwdString().substring(remoteLen - 30) :
+            state.getRemoteCwdString();
         String status = String.format("%1$-38s  %2$38s", localCwdString, remoteCwdString);
 
         out.println(ansi()

@@ -14,6 +14,10 @@ import java.util.Iterator;
 
 public class IOHanderTest {
 
-    IOHandler ioHandler = new IOHandler();
+    @Test
+    public void canCreateIOHandler()
+    {
+        new IOHandler(new Client());
+    }
 
 }

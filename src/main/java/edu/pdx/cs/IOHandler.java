@@ -1,5 +1,6 @@
 package edu.pdx.cs;
 
+import edu.pdx.cs.commands.Command;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -18,7 +19,6 @@ public class IOHandler {
     private Namespace namespace;
     private List<String> tokens;
     private Client client;
-    private boolean validInput;
     public boolean quitting;
 
 
@@ -87,30 +87,29 @@ public class IOHandler {
         }
     }
 
-    //TODO: The command factory needs to pass around a reference to the Client, but we don't want to instantiate clients
-    // all over the place, and we want to avoid passing the client everywhere too. What's a better pattern for this?
-    public ICommand parseInput()
+    public Command parseInput()
     {
-        ICommand command;
         List<String> subarguments = tokens.subList(1, tokens.size());
-        switch (tokens.get(0).toLowerCase())
+        Command command;
+        try
         {
-            case "login":
-                expectNSubarguments(2);
-                command = CommandFactory.createLogin(client);
-                command.assignInput(subarguments);
-                break;
-            case "quit":
-                quitting = true;
-                break;
+            switch (tokens.get(0).toLowerCase())
+            {
+                case "login":
+                    command = CommandFactory.createLogin(client, subarguments);
+                    break;
+                case "quit":
+                    quitting = true;
+                default:
+                    command = CommandFactory.createNull(client, subarguments);
+            }
         }
-        return null;
-    }
+        catch (IllegalArgumentException e)
+        {
+            System.err.println(e.getMessage());
+            command = CommandFactory.createNull(client, subarguments);
+        }
 
-
-    private void expectNSubarguments(int N)
-    {
-        if (this.tokens.size() != N+1)
-            throw new IllegalArgumentException("Wrong number of arguments.");
+        return command;
     }
 }

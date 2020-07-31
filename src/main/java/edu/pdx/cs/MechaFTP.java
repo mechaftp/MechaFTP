@@ -1,74 +1,73 @@
 package edu.pdx.cs;
 
+import edu.pdx.cs.commands.Command;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+
 import java.io.PrintStream;
-import java.net.UnknownHostException;
+import java.nio.file.Paths;
 
 import static org.fusesource.jansi.Ansi.ansi;
-import static org.fusesource.jansi.Ansi.Color.CYAN;
-import static org.fusesource.jansi.Ansi.Color.WHITE;
 
 public class MechaFTP
 {
     public static PrintStream out;
 
-    private static CLIStatusBar statusBar;
-    private static Connection currentConnection;
+    private static StatusBar statusBar;
     private static IOHandler ioHandler;
     private static Client client;
+    private static Validator validator;
 
     public static void main(String[] args)
     {
-        configureStartup(args);
+        startup(args);
 
         run();
 
         cleanup();
     }
 
-    private static void run()
-    {
-        statusBar = CLIStatusBar.create(System.out);
-        statusBar.setRemoteCwd("/data/aang");
-
-
-        while(true)
-        {
-            statusBar.render();
-            out.print(ansi().fgCyan().a("╚").reset().a(" mechaftp > ").reset());
-
-            ioHandler.readInput();
-            ioHandler.parseInput();
-
-            if (ioHandler.quitting)
-                break;
-        }
-    }
-
-    private static void configureStartup(String[] args)
+    private static void startup(String[] args)
     {
         Namespace cliArgs = parseStartup(args);
 
-        try
-        {
-            client = new Client();
-            out = cliArgs.get("logger");
-            ioHandler = new IOHandler(client);
-            currentConnection = new Connection(cliArgs.get("host"), (Integer) cliArgs.get("port"));
+        validator = new Validator();
+        client = new Client();
+        if (cliArgs != null)
+            client.connect(cliArgs.get("host"), cliArgs.get("port"));
+        out = cliArgs.get("output");
+        ioHandler = new IOHandler(client);
+        statusBar = StatusBar.create(out);
+
+        if (!validator.validatePath((String) cliArgs.getAttrs().get("logfile"))) {
+            System.out.println("Invalid log argument");
+        } else {
+            client.setLogfile(Paths.get((String) cliArgs.get("logfile")));
         }
-        catch (UnknownHostException e)
+    }
+
+    private static void run()
+    {
+        Command command;
+        do
         {
-            out.println("Invalid host detected: " + e.getMessage());
-        }
+            statusBar.render(client.state);
+            out.print(ansi().fgCyan().a("╚").reset().a(" mechaftp > ").reset());
+
+            ioHandler.readInput();
+            command = ioHandler.parseInput();
+            command.execute();
+
+        } while (!ioHandler.quitting);
     }
 
     private static void cleanup()
     {
         statusBar.close();
+        // Write logs to file???
     }
 
 
@@ -84,15 +83,17 @@ public class MechaFTP
         parser.addArgument("port")
             .type(Integer.class)
             .nargs("?")
-            .help("Port on the host to connect to. Defaults to ")
-            .setDefault(20);
+            .help("Port on the host to connect to");
         parser.addArgument("--version")
             .action(Arguments.version());
-        parser.addArgument("--logger")
-            .help("Set the logger output destination")
+        parser.addArgument("--output")
+            .help("Set the output destination")
             .type(PrintStream.class)
             .nargs("?")
             .setDefault(System.out);
+        parser.addArgument("-l", "--logfile")
+            .setDefault("Logs/")
+            .help("set the location of the log files");
 
         try
         {
