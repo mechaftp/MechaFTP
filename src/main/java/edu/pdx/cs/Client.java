@@ -1,5 +1,6 @@
 package edu.pdx.cs;
 import org.apache.commons.net.ftp.*;
+import org.apache.commons.net.ftp.FTPClient;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -101,14 +102,14 @@ public class Client {
 
     /**
      * Changes the working directory...
-     * @param path ...to the given file path
+     * @param dir ...to the given directory relative to the current working directory
      * @return true if the path change was successful, false otherwise
      */
-    protected boolean changeDirectory(String path){
+    protected boolean changeDirectory(String dir){
         boolean success = false;
 
         try {
-            success = ftp.changeWorkingDirectory(path);
+            success = ftp.changeWorkingDirectory(dir);
         } catch (IOException e) {
             e.printStackTrace();
         }

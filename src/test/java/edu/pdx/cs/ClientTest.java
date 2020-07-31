@@ -1,5 +1,6 @@
 package edu.pdx.cs;
 
+import org.apache.commons.net.ftp.FTPFile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,7 +8,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.IOException;
 import org.mockftpserver.fake.FakeFtpServer;
-import org.apache.commons.net.ftp.*;
 
 
 // This should probably be refactored into a different name
@@ -24,12 +24,12 @@ public class ClientTest {
     }
 
     @Test
-    public void testGetServerControlPort() {
+    public void testGetServerControlPort(){
         assertThat(server.getServerControlPort(), equalTo(Integer.parseInt(PORT)));
     }
 
     @Test
-    public void testGetUserInfo() {
+    public void testGetUserInfo(){
         String username = "aang";
         String password = "katara";
 
@@ -49,19 +49,6 @@ public class ClientTest {
     }
 
     @Test
-    public void testListRemoteDirectories() throws IOException {
-        Client client = new Client();
-        client.connect(HOSTNAME, Integer.parseInt(PORT));
-        client.login("aang", "katara");
-
-        FTPFile[] directories = client.listRemoteDirectories();
-
-        assertThat(directories.length, equalTo(1));
-        assertThat(directories[0].isDirectory(), equalTo(true));
-        assertThat(directories[0].getName(), containsString("testDir"));
-    }
-
-    @Test
     public void testListRemoteFiles() throws IOException{
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
@@ -77,6 +64,19 @@ public class ClientTest {
     }
 
     @Test
+    public void testListRemoteDirectories() throws IOException {
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        FTPFile[] directories = client.listRemoteDirectories();
+
+        assertThat(directories.length, equalTo(1));
+        assertThat(directories[0].isDirectory(), equalTo(true));
+        assertThat(directories[0].getName(), containsString("testDir"));
+    }
+
+    @Test
     public void testPrintWorkingDirectory() throws IOException{
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
@@ -89,13 +89,15 @@ public class ClientTest {
     public void testChangeWorkingDirectory() throws IOException {
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
-        client.login("bumi", "password");
+        client.login("aang", "katara");
 
-        assertThat(client.changeDirectory("/data/bumi/testDir"), equalTo(true));
+        assertThat(client.changeDirectory("testDir"), equalTo(true));
     }
 
     @After
     public void teardown() {
         server.stop();
     }
+
+
 }
