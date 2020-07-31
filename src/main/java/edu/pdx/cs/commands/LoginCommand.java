@@ -1,6 +1,7 @@
 package edu.pdx.cs.commands;
 
 import edu.pdx.cs.Client;
+import edu.pdx.cs.ClientState;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +16,7 @@ public class LoginCommand extends BaseCommand
     }
 
     @Override
-    public boolean execute()
+    public boolean execute(ClientState state)
     {
         String username = arguments.get(0);
         String password = arguments.get(1);
@@ -23,7 +24,8 @@ public class LoginCommand extends BaseCommand
             throw new IllegalStateException("Attempted execution before assigning input.");
         try
         {
-            return client.login(username, password);
+            state.setLoggedIn(client.login(username, password));
+            return true;
         }
         catch (IOException e)
         {

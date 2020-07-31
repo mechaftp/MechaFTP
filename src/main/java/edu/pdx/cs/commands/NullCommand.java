@@ -1,6 +1,7 @@
 package edu.pdx.cs.commands;
 
 import edu.pdx.cs.Client;
+import edu.pdx.cs.ClientState;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class NullCommand extends BaseCommand
     }
 
     @Override
-    public boolean execute()
+    public boolean execute(ClientState state)
     {
         return true;
     }

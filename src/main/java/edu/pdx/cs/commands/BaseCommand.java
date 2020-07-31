@@ -1,6 +1,7 @@
 package edu.pdx.cs.commands;
 
 import edu.pdx.cs.Client;
+import edu.pdx.cs.ClientState;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public abstract class BaseCommand implements Command
         this.arguments = arguments;
     }
 
-    public abstract boolean execute();
+    public abstract boolean execute(ClientState state);
 
     protected void expectNSubarguments(int N)
     {

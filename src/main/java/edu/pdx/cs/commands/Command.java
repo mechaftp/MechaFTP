@@ -1,10 +1,8 @@
 package edu.pdx.cs.commands;
 
-import java.util.List;
+import edu.pdx.cs.ClientState;
 
 public interface Command
 {
-    boolean execute();
-
-
+    boolean execute(ClientState state);
 }

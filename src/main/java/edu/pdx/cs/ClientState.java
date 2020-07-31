@@ -2,12 +2,15 @@ package edu.pdx.cs;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientState
 {
 
     private Path localCwd;
     private Path remoteCwd;
+    private boolean loggedIn;
 
     public ClientState()
     {
@@ -44,5 +47,13 @@ public class ClientState
         this.remoteCwd = remoteCwd;
     }
 
+    public boolean getLoggedIn()
+    {
+        return this.loggedIn;
+    }
 
+    public void setLoggedIn(boolean loggedIn)
+    {
+        this.loggedIn = loggedIn;
+    }
 }

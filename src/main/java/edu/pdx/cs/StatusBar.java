@@ -2,8 +2,7 @@ package edu.pdx.cs;
 
 import java.io.Closeable;
 import java.io.PrintStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 import org.fusesource.jansi.AnsiConsole;
 
@@ -26,7 +25,9 @@ public class StatusBar implements Closeable
 
     public void render(ClientState state)
     {
+        // Print command output???
 
+        // format the status bar
         int localLen = state.getLocalCwdString().length();
         int remoteLen = state.getRemoteCwdString().length();
         String localCwdString = localLen > 35 ?
@@ -37,14 +38,18 @@ public class StatusBar implements Closeable
             state.getRemoteCwdString();
         String status = String.format("%1$-38s  %2$38s", localCwdString, remoteCwdString);
 
+        // print the status bar
         out.println(ansi()
-            .fg(Color.CYAN).a("╔ ")
+            .fg(Color.CYAN).a("╠ ")
             .fg(Color.GREEN).a("[local] ")
             .fg(Color.WHITE).a(status)
             .fg(Color.GREEN).a(" [remote] ")
             .fg(Color.CYAN).a("╗")
             .reset()
         );
+
+        // print the command prompt
+        out.print(ansi().fgCyan().a("╚").reset().a(" mechaftp > ").reset());
     }
 
     public void close()
