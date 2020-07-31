@@ -1,11 +1,19 @@
 package edu.pdx.cs;
 
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+
 import java.io.IOException;
+import java.nio.file.Path;
+
 import org.mockftpserver.fake.FakeFtpServer;
 
 
@@ -49,6 +57,21 @@ public class ClientTest {
     public void teardown() {
         server.stop();
     }
+
+    @Test
+    public void testLogoutSuccess() throws IOException{
+        //String username = "apple,";
+        Logger logger = mock(Logger.class);
+        Path path = mock(Path.class);
+        FTPClient ftp = mock(FTPClient.class);
+        when(ftp.logout()).thenReturn(true);
+
+        Client client = new Client(logger, path, ftp);
+
+        assertTrue(client.logout("apple"));
+        verify(logger).info("User apple is logging out!");
+    }
+
 
 
 }
