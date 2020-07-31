@@ -62,6 +62,11 @@ public class FakeFtpServerFactory {
         bumi.setOwner("bumi");
         bumi.setGroup("users");
 
+        DirectoryEntry test = new DirectoryEntry("/data/bumi/test");
+        bumi.setPermissions(new Permissions("rw-rw-r--"));
+        bumi.setOwner("bumi");
+        bumi.setGroup("users");
+
         DirectoryEntry testDir = new DirectoryEntry("/data/aang/testDir");
         bumi.setPermissions(new Permissions("rw-rw-r--"));
         bumi.setOwner("aang");
@@ -92,6 +97,7 @@ public class FakeFtpServerFactory {
         fileSystem.add(aang);
         fileSystem.add(bumi);
         fileSystem.add(testDir);
+        fileSystem.add(test);
         fileSystem.add(file1);
         fileSystem.add(file2);
         fileSystem.add(file3);

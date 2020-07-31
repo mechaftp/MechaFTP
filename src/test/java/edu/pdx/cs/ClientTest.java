@@ -91,7 +91,7 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("bumi", "password");
 
-        assertThat(client.changeDirectory("/data/bumi/testDir"), equalTo(true));
+        assertThat(client.changeDirectory("/data/bumi/test"), equalTo(true));
     }
 
     @After
