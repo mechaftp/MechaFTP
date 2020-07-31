@@ -9,9 +9,21 @@ import org.apache.logging.log4j.LogManager;
 
 public class Client {
 
-    private static Logger logger = LogManager.getLogger(Log4jExample.class);
+   private static Logger logger;
     Path logpath;
-    FTPClient ftp = new FTPClient();
+    FTPClient ftp;
+
+    Client(){
+        logger =  LogManager.getLogger(Log4jExample.class);
+        ftp = new FTPClient();
+    }
+
+    Client(Logger logger, Path logpath, FTPClient ftp){
+        this.logger = logger;
+        this.logpath = logpath;
+        this.ftp = ftp;
+
+    }
 
     protected void connect (String server, int port) throws IOException {
         ftp.connect(server, port);
@@ -122,6 +134,13 @@ public class Client {
         */
          
         //cleanup
+    }
+
+    public boolean logout(String username)throws IOException{
+        logger.info("User " + username +" is logging out!");
+        return ftp.logout();
+        //ftp.disconnect();
+
     }
 
 

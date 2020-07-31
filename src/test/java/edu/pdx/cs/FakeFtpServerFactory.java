@@ -100,8 +100,6 @@ public class FakeFtpServerFactory {
         server.setFileSystem(fileSystem);
         server.addUserAccount(aang_user);
         server.addUserAccount(bumi_user);
-
-        //port 8080 works on Mac...not sure about other platforms
         server.setServerControlPort(8080);
 
         return server;

@@ -41,3 +41,11 @@ buildNumber.properties
 *.iml
 .idea
 .DS_Store
+.classpath
+.factorypath
+.project
+.settings/
+.vscode/
+
+# Build output
+mechaftp/
