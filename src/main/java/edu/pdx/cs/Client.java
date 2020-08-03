@@ -1,7 +1,10 @@
 package edu.pdx.cs;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +53,56 @@ public class Client {
     }
 
     void postFile(Path serverPath, Path toUpload) {
+        System.out.println(serverPath);
+        System.out.println(toUpload);
 
+        String server = "demo.wftpserver.com";
+        int port = 21;
+        String user = "demo";
+        String pass = "demo";
+
+        FTPClient ftpClient = new FTPClient();
+
+        try {
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+            // APPROACH #2: uploads second file using an OutputStream
+            String filepath2 = "/Users/David/FTP_UPLOADED1.txt";
+            File secondLocalFile = new File(filepath2);
+            String secondRemoteFile = filepath2;
+            FileInputStream inputStream = new FileInputStream(secondLocalFile);
+
+            System.out.println("Start uploading second file");
+            OutputStream outputStream = ftpClient.storeFileStream(secondRemoteFile);
+            byte[] bytesIn = new byte[4096];
+            int read = 0;
+
+            while ((read = inputStream.read(bytesIn)) != -1) {
+                outputStream.write(bytesIn, 0, read);
+            }
+            inputStream.close();
+            outputStream.close();
+
+            boolean completed = ftpClient.completePendingCommand();
+            if (completed) {
+                System.out.println("The second file is uploaded successfully.");
+            }
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    if (ftpClient.isConnected()) {
+                        ftpClient.logout();
+                        ftpClient.disconnect();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
     }
 
     void run() {
