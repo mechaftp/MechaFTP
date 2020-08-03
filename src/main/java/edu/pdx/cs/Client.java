@@ -1,7 +1,9 @@
 package edu.pdx.cs;
+import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +49,72 @@ public class Client {
 
     void setLogfile(Path logpath) {
         this.logpath = logpath;
+    }
+
+    /**
+     * Lists directories w/in the current working directory on remote server
+     * @return an array of <code>FTPFile</code> objects
+     */
+    protected FTPFile[] listRemoteDirectories() throws IOException {
+        String path = ftp.printWorkingDirectory();
+        return ftp.listDirectories(path);
+    }
+
+    /**
+     * Lists files w/in the current directory on remote server
+     * @return an array of <code>FTPFile</code> objects
+     */
+    protected FTPFile[] listRemoteFiles() throws IOException{
+        String path = ftp.printWorkingDirectory();
+
+        FTPFile[] files =  ftp.listFiles(path, new FTPFileFilter() {
+            @Override
+            public boolean accept(FTPFile ftpFile) {
+                return !ftpFile.isDirectory();
+            }
+        });
+
+        return files;
+    }
+
+    /**
+     * Converts names of <code>FTPFile</code> objects to strings
+     * @param files array of <code>FTPFiles</code> objects
+     * @return <code>ArrayList</code> of names in <code>String</code> format
+     */
+    protected ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
+       ArrayList<String> names = null;
+
+       for(FTPFile file:files)
+           names.add(file.getName());
+
+       return names;
+    }
+
+    /**
+     * Returns <code>String</code> of the current working directory
+     * @return current working directory
+     * @throws IOException
+     */
+    protected String printWorkingDirectory() throws IOException{
+        return ftp.printWorkingDirectory();
+    }
+
+    /**
+     * Changes the working directory...
+     * @param dir ...to the given directory relative to the current working directory
+     * @return true if the path change was successful, false otherwise
+     */
+    protected boolean changeDirectory(String dir){
+        boolean success = false;
+
+        try {
+            success = ftp.changeWorkingDirectory(dir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return success;
     }
 
     void postFile(Path serverPath, Path toUpload) {
