@@ -1,43 +1,68 @@
 package edu.pdx.cs;
+
 import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.nio.file.Paths;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 public class Client {
 
-   private static Logger logger;
+    private static Logger logger;
+    public ClientState state;
     Path logpath;
     FTPClient ftp;
 
     Client(){
         logger =  LogManager.getLogger(Log4jExample.class);
         ftp = new FTPClient();
+        state = new ClientState();
     }
 
     Client(Logger logger, Path logpath, FTPClient ftp){
         this.logger = logger;
         this.logpath = logpath;
         this.ftp = ftp;
-
+        this.state = new ClientState();
     }
 
-    protected void connect (String server, int port) throws IOException {
-        ftp.connect(server, port);
+    public void connect(String server, int port)
+    {
+        connect(server, Integer.valueOf(port));
+    }
+
+    public void connect(String server, Integer port)
+    {
+        try
+        {
+            if (port != null)
+                ftp.connect(server, port);
+            else
+                ftp.connect(server);
+            // TODO: state.setRemoteCwd to the current working directory on server
+            state.setRemoteCwd(Paths.get("/data/aang"));
+        }
+        catch (IOException e)
+        {
+            logger.error("Failed to connect to server " + server + " with error:\n" + e.getLocalizedMessage());
+            state.setRemoteCwd(Path.of(""));
+        }
+
     }
 
     /**
      * Logs users into the FTP server
+     *
      * @param username the username
      * @param password the user's password
      * @return true if login is successful, false otherwise
      * @throws IOException
      */
-    protected boolean login (String username, String password) throws IOException {
+    public boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
             logger.info("Logged in as: ", username);
@@ -47,7 +72,8 @@ public class Client {
         return status;
     }
 
-    void setLogfile(Path logpath) {
+    void setLogfile(Path logpath)
+    {
         this.logpath = logpath;
     }
 
@@ -115,26 +141,6 @@ public class Client {
             success = printWorkingDirectory().equals(cwd + "/" + newDir);
 
         return success;
-    }
-
-    void postFile(Path serverPath, Path toUpload) {
-
-    }
-
-    void run() {
-        /*
-        while(true) {
-            try {
-                ioHandler.getInput();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            break;
-        }
-        */
-         
-        //cleanup
     }
 
     public boolean logout(String username)throws IOException{
