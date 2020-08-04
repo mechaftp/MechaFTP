@@ -13,6 +13,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.mockftpserver.fake.FakeFtpServer;
 
@@ -79,8 +80,10 @@ public class ClientTest {
 
         Client client = new Client();
         client.connect("localhost", 8080);
+        client.login(username, password);
 
-        assertThat(client.login(username, password), equalTo(true));
+        boolean ret = client.uploadFile(Paths.get("ValidTestFile2"));
+        assertThat(ret, equalTo(true));
     }
 
     @Test
@@ -90,8 +93,11 @@ public class ClientTest {
 
         Client client = new Client();
         client.connect("localhost", 8080);
+        client.login(username, password);
 
-        assertThat(client.login(username, password), equalTo(true));
+        boolean ret = client.downloadFile();
+        assertThat(ret, equalTo(true));
+//        assertThat(client.downloadFile(), equalTo(true));
     }
 
     @Test
@@ -101,7 +107,10 @@ public class ClientTest {
 
         Client client = new Client();
         client.connect("localhost", 8080);
+        client.login(username, password);
 
-        assertThat(client.login(username, password), equalTo(true));
+        boolean ret = client.createDirectory();
+        assertThat(ret, equalTo(true));
+//        assertThat(client.login(username, password), equalTo(true));
     }
 }

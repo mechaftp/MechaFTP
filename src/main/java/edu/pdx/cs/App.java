@@ -51,20 +51,20 @@ public class App {
                 }
             }
 
-            // Test upload file
-            System.out.println("UPLOAD EXECUTED!!!!!!!");
-            client.uploadFile(Paths.get("src.txt"), Paths.get("dst.txt"));
-
-            // Test download file
-            System.out.println("DOWNLOAD EXECUTED!!!!!!!");
-            client.downloadFile();
-
-            // Test create directory
-            System.out.println("CREATE DIRECTORY EXECUTED!!!!!!!");
-            client.createDirectory();
+//            // Test upload file
+//            System.out.println("UPLOAD EXECUTED!!!!!!!");
+//            client.uploadFile(Paths.get("src.txt"), Paths.get("dst.txt"));
+//
+//            // Test download file
+//            System.out.println("DOWNLOAD EXECUTED!!!!!!!");
+//            client.downloadFile();
+//
+//            // Test create directory
+//            System.out.println("CREATE DIRECTORY EXECUTED!!!!!!!");
+//            client.createDirectory();
 
             client.run();
-        } catch (ArgumentParserException | IOException e) {
+        } catch (ArgumentParserException e) {
             e.printStackTrace();
             exit(0);
         }

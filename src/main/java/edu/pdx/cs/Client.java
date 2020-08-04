@@ -52,32 +52,23 @@ public class Client {
         this.logpath = logpath;
     }
 
-    public void uploadFile(Path serverPath, Path toUpload) {
-        System.out.println(serverPath);
-        System.out.println(toUpload);
+    public boolean uploadFile(Path toUpload) {
+        System.out.println("toUpload: " + toUpload);
 
-        String server = "speedtest.tele2.net";
-        int port = 21;
-        String user = "anonymous";
-        String pass = "";
-
-        FTPClient ftpClient = new FTPClient();
+        boolean done = false;
 
         try {
-            ftpClient.connect(server, port);
-            ftpClient.login(user, pass);
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.enterLocalPassiveMode();
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
 
-            // APPROACH #1: uploads first file using an InputStream
-            String filepath1 = "/Users/David/FTP_UPLOADED1.txt";
+            String filepath1 = String.valueOf(toUpload);
             File firstLocalFile = new File(filepath1);
 
-            String firstRemoteFile = "/upload/FTP_UPLOADED1.txt";
+            String firstRemoteFile = String.valueOf(toUpload);
             InputStream inputStream = new FileInputStream(firstLocalFile);
 
             System.out.println("Start uploading first file - " + firstRemoteFile);
-            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
+            done = ftp.storeFile(firstRemoteFile, inputStream);
             inputStream.close();
             if (done) {
                 System.out.println("The first file is uploaded successfully.");
@@ -87,36 +78,29 @@ public class Client {
             ex.printStackTrace();
         } finally {
             try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
+                if (ftp.isConnected()) {
+                    ftp.logout();
+                    ftp.disconnect();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+        return done;
     }
 
-    public void downloadFile() {
-        String server = "speedtest.tele2.net";
-        int port = 21;
-        String user = "anonymous";
-        String pass = "";
-
-        FTPClient ftpClient = new FTPClient();
+    public boolean downloadFile() {
+        boolean success = false;
 
         try {
-            ftpClient.connect(server, port);
-            ftpClient.login(user, pass);
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftp.enterLocalPassiveMode();
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
 
-            // APPROACH #1: using retrieveFile(String, OutputStream)
             String filepath1 = "1MB.zip";
             String remoteFile1 = "//" + filepath1;
             File downloadFile1 = new File(filepath1);
             OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
-            boolean success = ftpClient.retrieveFile(remoteFile1, outputStream1);
+            success = ftp.retrieveFile(remoteFile1, outputStream1);
             outputStream1.close();
 
             if (success) {
@@ -127,14 +111,15 @@ public class Client {
             ex.printStackTrace();
         } finally {
             try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
+                if (ftp.isConnected()) {
+                    ftp.logout();
+                    ftp.disconnect();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+        return success;
     }
 
     private static void showServerReply(FTPClient ftpClient) {
@@ -146,22 +131,15 @@ public class Client {
         }
     }
 
-    public void createDirectory() throws IOException {
-        String server = "speedtest.tele2.net";
-        int port = 21;
-        String user = "anonymous";
-        String pass = "";
-
-        FTPClient ftpClient = new FTPClient();
+    public boolean createDirectory() throws IOException {
+        boolean success = false;
 
         try {
-            ftpClient.connect(server, port);
-            ftpClient.login(user, pass);
-            ftpClient.enterLocalPassiveMode();
+            ftp.enterLocalPassiveMode();
 
             String dirToCreate = "/upload123";
-            boolean success = ftpClient.makeDirectory(dirToCreate);
-            showServerReply(ftpClient);
+            success = ftp.makeDirectory(dirToCreate);
+            showServerReply(ftp);
             if (success) {
                 System.out.println("Successfully created directory: " + dirToCreate);
             } else {
@@ -171,14 +149,15 @@ public class Client {
             ex.printStackTrace();
         } finally {
             try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
+                if (ftp.isConnected()) {
+                    ftp.logout();
+                    ftp.disconnect();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+        return success;
     }
 
     void run() {
