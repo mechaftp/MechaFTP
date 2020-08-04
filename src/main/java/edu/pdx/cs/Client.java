@@ -102,17 +102,17 @@ public class Client {
 
     /**
      * Changes the working directory...
-     * @param dir ...to the given directory relative to the current working directory
+     * @param newDir ...to the given directory relative to the current working directory
+     * @param cwd The current working directory
      * @return true if the path change was successful, false otherwise
      */
-    protected boolean changeDirectory(String dir){
-        boolean success = false;
+    protected boolean changeDirectory(String newDir, String cwd) throws IOException {
+        boolean success = ftp.changeWorkingDirectory(newDir);
 
-        try {
-            success = ftp.changeWorkingDirectory(dir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //handles the case in which false is returned due to attempting to
+        //"change" into the current working directory
+        if(!success)
+            success = printWorkingDirectory().equals(cwd + "/" + newDir);
 
         return success;
     }

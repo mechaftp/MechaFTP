@@ -91,13 +91,16 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-        assertThat(client.changeDirectory("testDir"), equalTo(true));
+        String cwd = client.printWorkingDirectory();
+
+        assertThat(client.changeDirectory("testDir", cwd), equalTo(true));
+
+        //try to "change" into the current working directory
+        assertThat(client.changeDirectory("testDir", cwd), equalTo(true));
     }
 
     @After
     public void teardown() {
         server.stop();
     }
-
-
 }
