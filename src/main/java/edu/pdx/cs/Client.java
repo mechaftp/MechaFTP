@@ -52,14 +52,14 @@ public class Client {
         this.logpath = logpath;
     }
 
-    void postFile(Path serverPath, Path toUpload) {
+    void uploadFile(Path serverPath, Path toUpload) {
         System.out.println(serverPath);
         System.out.println(toUpload);
 
-        String server = "demo.wftpserver.com";
+        String server = "speedtest.tele2.net";
         int port = 21;
-        String user = "demo";
-        String pass = "demo";
+        String user = "anonymous";
+        String pass = "";
 
         FTPClient ftpClient = new FTPClient();
 
@@ -69,40 +69,93 @@ public class Client {
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
-            // APPROACH #2: uploads second file using an OutputStream
-            String filepath2 = "/Users/David/FTP_UPLOADED1.txt";
-            File secondLocalFile = new File(filepath2);
-            String secondRemoteFile = filepath2;
-            FileInputStream inputStream = new FileInputStream(secondLocalFile);
+            // APPROACH #1: uploads first file using an InputStream
+            String filepath1 = "/Users/David/FTP_UPLOADED1.txt";
+            File firstLocalFile = new File(filepath1);
 
-            System.out.println("Start uploading second file");
-            OutputStream outputStream = ftpClient.storeFileStream(secondRemoteFile);
-            byte[] bytesIn = new byte[4096];
-            int read = 0;
+            String firstRemoteFile = "/upload/FTP_UPLOADED1.txt";
+            InputStream inputStream = new FileInputStream(firstLocalFile);
 
-            while ((read = inputStream.read(bytesIn)) != -1) {
-                outputStream.write(bytesIn, 0, read);
-            }
+            System.out.println("Start uploading first file - " + firstRemoteFile);
+            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
             inputStream.close();
-            outputStream.close();
-
-            boolean completed = ftpClient.completePendingCommand();
-            if (completed) {
-                System.out.println("The second file is uploaded successfully.");
+            if (done) {
+                System.out.println("The first file is uploaded successfully.");
             }
 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
-            } finally {
-                try {
-                    if (ftpClient.isConnected()) {
-                        ftpClient.logout();
-                        ftpClient.disconnect();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
             }
+        }
+    }
+
+    void downloadFile() {
+        String server = "speedtest.tele2.net";
+        int port = 21;
+        String user = "anonymous";
+        String pass = "";
+
+        FTPClient ftpClient = new FTPClient();
+
+        try {
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+            // APPROACH #1: using retrieveFile(String, OutputStream)
+            String filepath1 = "1MB.zip";
+            String remoteFile1 = "//" + filepath1;
+            File downloadFile1 = new File(filepath1);
+            OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
+            boolean success = ftpClient.retrieveFile(remoteFile1, outputStream1);
+            outputStream1.close();
+            //downloadFile1.delete();
+
+            if (success) {
+                System.out.println("File #1 has been downloaded successfully.");
+            }
+
+//            // APPROACH #2: using InputStream retrieveFileStream(String)
+//            String filepath2 = "FTP_DOWNLOADED2.txt";
+//            String remoteFile2 = "/test/" + filepath2;
+//            File downloadFile2 = new File(filepath2);
+//            OutputStream outputStream2 = new BufferedOutputStream(new FileOutputStream(downloadFile2));
+//            InputStream inputStream = ftpClient.retrieveFileStream(remoteFile2);
+//            byte[] bytesArray = new byte[4096];
+//            int bytesRead = -1;
+//            while ((bytesRead = inputStream.read(bytesArray)) != -1) {
+//                outputStream2.write(bytesArray, 0, bytesRead);
+//            }
+//
+//            success = ftpClient.completePendingCommand();
+//            if (success) {
+//                System.out.println("File #2 has been downloaded successfully.");
+//            }
+//            outputStream2.close();
+//            inputStream.close();
+//            //downloadFile2.delete();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     void run() {
