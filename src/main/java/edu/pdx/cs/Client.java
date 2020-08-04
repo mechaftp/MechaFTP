@@ -52,7 +52,7 @@ public class Client {
         this.logpath = logpath;
     }
 
-    void uploadFile(Path serverPath, Path toUpload) {
+    public void uploadFile(Path serverPath, Path toUpload) {
         System.out.println(serverPath);
         System.out.println(toUpload);
 
@@ -97,7 +97,7 @@ public class Client {
         }
     }
 
-    void downloadFile() {
+    public void downloadFile() {
         String server = "speedtest.tele2.net";
         int port = 21;
         String user = "anonymous";
@@ -118,32 +118,55 @@ public class Client {
             OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
             boolean success = ftpClient.retrieveFile(remoteFile1, outputStream1);
             outputStream1.close();
-            //downloadFile1.delete();
 
             if (success) {
                 System.out.println("File #1 has been downloaded successfully.");
             }
 
-//            // APPROACH #2: using InputStream retrieveFileStream(String)
-//            String filepath2 = "FTP_DOWNLOADED2.txt";
-//            String remoteFile2 = "/test/" + filepath2;
-//            File downloadFile2 = new File(filepath2);
-//            OutputStream outputStream2 = new BufferedOutputStream(new FileOutputStream(downloadFile2));
-//            InputStream inputStream = ftpClient.retrieveFileStream(remoteFile2);
-//            byte[] bytesArray = new byte[4096];
-//            int bytesRead = -1;
-//            while ((bytesRead = inputStream.read(bytesArray)) != -1) {
-//                outputStream2.write(bytesArray, 0, bytesRead);
-//            }
-//
-//            success = ftpClient.completePendingCommand();
-//            if (success) {
-//                System.out.println("File #2 has been downloaded successfully.");
-//            }
-//            outputStream2.close();
-//            inputStream.close();
-//            //downloadFile2.delete();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
+    private static void showServerReply(FTPClient ftpClient) {
+        String[] replies = ftpClient.getReplyStrings();
+        if (replies != null && replies.length > 0) {
+            for (String aReply : replies) {
+                System.out.println("SERVER: " + aReply);
+            }
+        }
+    }
+
+    public void createDirectory() throws IOException {
+        String server = "speedtest.tele2.net";
+        int port = 21;
+        String user = "anonymous";
+        String pass = "";
+
+        FTPClient ftpClient = new FTPClient();
+
+        try {
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.enterLocalPassiveMode();
+
+            String dirToCreate = "/upload123";
+            boolean success = ftpClient.makeDirectory(dirToCreate);
+            showServerReply(ftpClient);
+            if (success) {
+                System.out.println("Successfully created directory: " + dirToCreate);
+            } else {
+                System.out.println("Failed to create directory. See server's reply.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {

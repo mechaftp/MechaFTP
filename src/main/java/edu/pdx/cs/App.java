@@ -7,6 +7,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -58,8 +59,12 @@ public class App {
             System.out.println("DOWNLOAD EXECUTED!!!!!!!");
             client.downloadFile();
 
+            // Test create directory
+            System.out.println("CREATE DIRECTORY EXECUTED!!!!!!!");
+            client.createDirectory();
+
             client.run();
-        } catch (ArgumentParserException e) {
+        } catch (ArgumentParserException | IOException e) {
             e.printStackTrace();
             exit(0);
         }

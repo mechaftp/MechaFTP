@@ -72,6 +72,36 @@ public class ClientTest {
         verify(logger).info("User apple is logging out!");
     }
 
+    @Test
+    public void testUploadFile() throws IOException {
+        String username = "aang";
+        String password = "katara";
 
+        Client client = new Client();
+        client.connect("localhost", 8080);
 
+        assertThat(client.login(username, password), equalTo(true));
+    }
+
+    @Test
+    public void testDownloadFile() throws IOException {
+        String username = "aang";
+        String password = "katara";
+
+        Client client = new Client();
+        client.connect("localhost", 8080);
+
+        assertThat(client.login(username, password), equalTo(true));
+    }
+
+    @Test
+    public void testCreateDirectory() throws IOException {
+        String username = "aang";
+        String password = "katara";
+
+        Client client = new Client();
+        client.connect("localhost", 8080);
+
+        assertThat(client.login(username, password), equalTo(true));
+    }
 }
