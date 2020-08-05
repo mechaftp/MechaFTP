@@ -1,20 +1,13 @@
 package edu.pdx.cs;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.net.ftp.FTPFile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.mockftpserver.fake.FakeFtpServer;
 
 
@@ -22,6 +15,8 @@ import org.mockftpserver.fake.FakeFtpServer;
 public class ClientTest {
 
     private FakeFtpServer server;
+    private static final String HOSTNAME = "localhost";
+    private static final String PORT = System.getProperty("http.port", "8080");
 
     @Before
     public void init() {
@@ -31,7 +26,7 @@ public class ClientTest {
 
     @Test
     public void testGetServerControlPort(){
-        assertThat(server.getServerControlPort(), equalTo(8080));
+        assertThat(server.getServerControlPort(), equalTo(Integer.parseInt(PORT)));
     }
 
     @Test
@@ -49,28 +44,55 @@ public class ClientTest {
         String password = "katara";
 
         Client client = new Client();
-        client.connect("localhost", 8080);
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
 
         assertThat(client.login(username, password), equalTo(true));
     }
 
-    @After
-    public void teardown() {
-        server.stop();
+    @Test
+    public void testListRemoteFiles() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        FTPFile[] files = client.listRemoteFiles();
+
+        assertThat(files.length, equalTo(2));
+        assertThat(files[0].isDirectory(), equalTo(false));
+        assertThat(files[0].getName(), containsString("love_note"));
+        assertThat(files[1].isDirectory(), equalTo(false));
+        assertThat(files[1].getName(), containsString("momo.gif"));
     }
 
     @Test
-    public void testLogoutSuccess() throws IOException{
-        //String username = "apple,";
-        Logger logger = mock(Logger.class);
-        Path path = mock(Path.class);
-        FTPClient ftp = mock(FTPClient.class);
-        when(ftp.logout()).thenReturn(true);
+    public void testListRemoteDirectories() throws IOException {
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
 
-        Client client = new Client(logger, path, ftp);
+        FTPFile[] directories = client.listRemoteDirectories();
 
-        assertTrue(client.logout("apple"));
-        verify(logger).info("User apple is logging out!");
+        assertThat(directories.length, equalTo(1));
+        assertThat(directories[0].isDirectory(), equalTo(true));
+        assertThat(directories[0].getName(), containsString("testDir"));
+    }
+
+    @Test
+    public void testPrintWorkingDirectory() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("bumi", "password");
+
+        assertThat(client.printWorkingDirectory(), equalTo("/data/bumi"));
+    }
+
+    @Test
+    public void testChangeWorkingDirectory() throws IOException {
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.changeDirectory("testDir"), equalTo(true));
     }
 
     @Test
@@ -111,6 +133,10 @@ public class ClientTest {
 
         boolean ret = client.createDirectory();
         assertThat(ret, equalTo(true));
-//        assertThat(client.login(username, password), equalTo(true));
+    }
+
+    @After
+    public void teardown() {
+        server.stop();
     }
 }
