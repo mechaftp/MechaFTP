@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.File;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
 
 public class Client {
 
@@ -30,12 +34,16 @@ public class Client {
         this.state = new ClientState();
     }
 
-    public void connect(String server, int port)
-    {
-        connect(server, Integer.valueOf(port));
+    protected void connect (String server, int port) throws IOException {
+        ftp.connect(server, port);
     }
 
-    public void connect(String server, Integer port)
+/*    public void connect(String server, int port)
+    {
+        connect(server, Integer.valueOf(port));
+    }  */
+
+/*    public void connect(String server, Integer port)
     {
         try
         {
@@ -52,7 +60,7 @@ public class Client {
             state.setRemoteCwd(Path.of(""));
         }
 
-    }
+    }  */
 
     /**
      * Logs users into the FTP server
@@ -141,6 +149,23 @@ public class Client {
         }
 
         return success;
+    }
+
+    /**
+     * Determines directories w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of directory names w/in the cwd
+     */
+    public ArrayList<String> listDirectoriesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] directories = cwd.listFiles();
+        ArrayList<String> dirNames = new ArrayList<>();
+
+        for(File dir:directories) {
+            if(dir.isDirectory())
+                dirNames.add(dir.getName());
+        }
+
+        return dirNames;
     }
 
     public boolean logout(String username)throws IOException{
