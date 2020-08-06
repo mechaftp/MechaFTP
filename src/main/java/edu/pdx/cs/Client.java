@@ -34,16 +34,12 @@ public class Client {
         this.state = new ClientState();
     }
 
-    protected void connect (String server, int port) throws IOException {
-        ftp.connect(server, port);
-    }
-
-/*    public void connect(String server, int port)
+    public void connect(String server, int port)
     {
         connect(server, Integer.valueOf(port));
-    }  */
+    }
 
-/*    public void connect(String server, Integer port)
+    public void connect(String server, Integer port)
     {
         try
         {
@@ -60,7 +56,7 @@ public class Client {
             state.setRemoteCwd(Path.of(""));
         }
 
-    }  */
+    }
 
     /**
      * Logs users into the FTP server
@@ -166,6 +162,23 @@ public class Client {
         }
 
         return dirNames;
+    }
+
+    /**
+     * Determines files w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of file names w/in the cwd
+     */
+    public ArrayList<String> listFilesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] files = cwd.listFiles();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        for(File file:files) {
+            if(!file.isDirectory())
+                fileNames.add(file.getName());
+        }
+
+        return fileNames;
     }
 
     public boolean logout(String username)throws IOException{
