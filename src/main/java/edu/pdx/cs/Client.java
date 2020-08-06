@@ -143,10 +143,24 @@ public class Client {
         return success;
     }
 
+    /**
+     * Path getter function
+     * @return path
+     */
+    public Path getPath(){
+        return this.logpath;
+    }
+
+
+    /**
+     * Logs the username off and outputs logging out message
+     * @param username
+     * @return
+     * @throws IOException
+     */
     public boolean logout(String username)throws IOException{
         logger.info("User " + username +" is logging out!");
         return ftp.logout();
-        //ftp.disconnect();
 
     }
 
