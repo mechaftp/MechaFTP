@@ -93,7 +93,7 @@ public class Client {
             InputStream inputStream = new FileInputStream(firstLocalFile);
 
             System.out.println("Start uploading first file - " + firstRemoteFile);
-            done = ftp.storeFile(firstRemoteFile, inputStream);
+            done = ftp.storeUniqueFile(inputStream);
             inputStream.close();
             if (done) {
                 System.out.println("The first file is uploaded successfully.");
@@ -256,10 +256,4 @@ public class Client {
         //ftp.disconnect();
 
     }
-
-    public void run() {
-
-    }
-
-
 }
