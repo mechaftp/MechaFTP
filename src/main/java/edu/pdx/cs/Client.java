@@ -87,8 +87,18 @@ public class Client {
      */
     protected FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
+        FTPFile[] directories = ftp.listDirectories(path);
+
+        //log
+        if(directories == null)
+            logger.info("No directories from remote server added to list");
+        else {
+            for (FTPFile dir : directories) {
+                logger.info("Directory " + dir.getName() + " from remote server added to list");
+            }
+        }
         
-        return ftp.listDirectories(path);
+        return directories;
     }
 
     /**
@@ -104,6 +114,14 @@ public class Client {
                 return !ftpFile.isDirectory();
             }
         });
+
+        //log
+        if(files == null)
+            logger.info("No files from remote server added to list");
+        else{
+            for(FTPFile file : files)
+               logger.info("File " + file.getName() + " from remote server added to list");
+        }
 
         return files;
     }
@@ -145,6 +163,11 @@ public class Client {
             e.printStackTrace();
         }
 
+        if(success)
+            logger.info("Changed to directory " + dir + " on remote server");
+        else
+            logger.error("Failed to change to directory " + dir + " on remote server");
+
         return success;
     }
 
@@ -157,9 +180,15 @@ public class Client {
         File[] directories = cwd.listFiles();
         ArrayList<String> dirNames = new ArrayList<>();
 
-        for(File dir:directories) {
-            if(dir.isDirectory())
-                dirNames.add(dir.getName());
+
+        if(directories == null)
+            logger.info("No directories from local machine added to list");
+        else {
+            for (File dir : directories) {
+                if (dir.isDirectory())
+                    dirNames.add(dir.getName());
+                logger.info("Directory " + dir.getName() + " from local machine added to list");
+            }
         }
 
         return dirNames;
@@ -174,9 +203,14 @@ public class Client {
         File[] files = cwd.listFiles();
         ArrayList<String> fileNames = new ArrayList<>();
 
-        for(File file:files) {
-            if(!file.isDirectory())
-                fileNames.add(file.getName());
+        if(files == null)
+            logger.info("No files from local machine added to list");
+        else {
+            for (File file : files) {
+                if (!file.isDirectory())
+                    fileNames.add(file.getName());
+                logger.info("File " + file.getName() + " from local machine added to list");
+            }
         }
 
         return fileNames;
