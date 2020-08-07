@@ -65,9 +65,9 @@ public class Client {
     public boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
-            logger.info("Logged in as: ", username);
+            logger.info("Logged in as: " + username);
         } else {
-            logger.error("Failed login for: ", username);
+            logger.error("Failed login for: " + username);
         }
         return status;
     }
