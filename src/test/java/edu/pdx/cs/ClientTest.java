@@ -131,6 +131,4 @@ public class ClientTest {
     public void teardown() {
         server.stop();
     }
-
-
 }
