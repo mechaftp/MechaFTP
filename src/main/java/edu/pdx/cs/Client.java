@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.File;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
 
 public class Client {
 
@@ -65,9 +69,9 @@ public class Client {
     public boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
-            logger.info("Logged in as: ", username);
+            logger.info("Logged in as: " + username);
         } else {
-            logger.error("Failed login for: ", username);
+            logger.error("Failed login for: " + username);
         }
         return status;
     }
@@ -83,7 +87,18 @@ public class Client {
      */
     protected FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
-        return ftp.listDirectories(path);
+        FTPFile[] directories = ftp.listDirectories(path);
+
+        //log
+        if(directories == null)
+            logger.info("No directories from remote server added to list");
+        else {
+            for (FTPFile dir : directories) {
+                logger.info("Directory " + dir.getName() + " from remote server added to list");
+            }
+        }
+        
+        return directories;
     }
 
     /**
@@ -99,6 +114,14 @@ public class Client {
                 return !ftpFile.isDirectory();
             }
         });
+
+        //log
+        if(files == null)
+            logger.info("No files from remote server added to list");
+        else{
+            for(FTPFile file : files)
+               logger.info("File " + file.getName() + " from remote server added to list");
+        }
 
         return files;
     }
@@ -140,7 +163,57 @@ public class Client {
         if(!success)
             success = printWorkingDirectory().equals(cwd + "/" + newDir);
 
+        if(success)
+            logger.info("Changed to directory " + dir + " on remote server");
+        else
+            logger.error("Failed to change to directory " + dir + " on remote server");
+
         return success;
+    }
+
+    /**
+     * Determines directories w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of directory names w/in the cwd
+     */
+    public ArrayList<String> listDirectoriesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] directories = cwd.listFiles();
+        ArrayList<String> dirNames = new ArrayList<>();
+
+
+        if(directories == null)
+            logger.info("No directories from local machine added to list");
+        else {
+            for (File dir : directories) {
+                if (dir.isDirectory())
+                    dirNames.add(dir.getName());
+                logger.info("Directory " + dir.getName() + " from local machine added to list");
+            }
+        }
+
+        return dirNames;
+    }
+
+    /**
+     * Determines files w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of file names w/in the cwd
+     */
+    public ArrayList<String> listFilesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] files = cwd.listFiles();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        if(files == null)
+            logger.info("No files from local machine added to list");
+        else {
+            for (File file : files) {
+                if (!file.isDirectory())
+                    fileNames.add(file.getName());
+                logger.info("File " + file.getName() + " from local machine added to list");
+            }
+        }
+
+        return fileNames;
     }
 
     public boolean logout(String username)throws IOException{
