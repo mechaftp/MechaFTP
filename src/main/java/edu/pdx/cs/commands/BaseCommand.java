@@ -12,6 +12,7 @@ public abstract class BaseCommand implements Command
 
     protected BaseCommand(Client client, List<String> arguments)
     {
+        this.client = client;
         this.arguments = arguments;
     }
 
