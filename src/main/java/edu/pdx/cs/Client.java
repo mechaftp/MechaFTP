@@ -153,7 +153,7 @@ public class Client {
      * @throws IOException
      */
     public boolean retrieveFiles(String remote)throws IOException{
-
+        //
         FileOutputStream stream = new FileOutputStream( remote);
         boolean getFile = ftp.retrieveFile(remote,stream);
 
