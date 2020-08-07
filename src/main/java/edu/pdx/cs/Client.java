@@ -3,6 +3,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
+import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -52,27 +53,23 @@ public class Client {
         this.logpath = logpath;
     }
 
-    public boolean uploadFile(Path toUpload) {
-        System.out.println("toUpload: " + toUpload);
+    public boolean uploadFile(String fileFullName, String fileName, String hostDir) throws IOException {
+
+
+//        System.out.println("toUpload: " + toUpload);
+
+
+
 
         boolean done = false;
 
-        try {
-            ftp.enterLocalPassiveMode();
-            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+        ftp.enterLocalPassiveMode();
 
-            String filepath1 = String.valueOf(toUpload);
-            File firstLocalFile = new File(filepath1);
+        try (InputStream input = new FileInputStream(new File(fileFullName))) {
 
-            String firstRemoteFile = String.valueOf(toUpload);
-            InputStream inputStream = new FileInputStream(firstLocalFile);
+            this.ftp.storeFile(hostDir + fileName, input);
 
-            System.out.println("Start uploading first file - " + firstRemoteFile);
-            done = ftp.storeFile(firstRemoteFile, inputStream);
-            inputStream.close();
-            if (done) {
-                System.out.println("The first file is uploaded successfully.");
-            }
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -88,6 +85,30 @@ public class Client {
         }
         return done;
     }
+
+
+    // Deep version
+    public boolean uploadAFile(File source, String des) throws IOException {
+
+        boolean done = false;
+//        FileInputStream  filein = new FileInputStream(des);
+//        ftp.retrieveFile(source, filein);
+        if(ftp.storeFile(des, new FileInputStream(source)))
+        {
+            done = true;
+        }
+        return done;
+    }
+
+    //Deep version
+    public void downloadAFile(String source, String des) throws IOException{
+        FileOutputStream fileOutputStream = new FileOutputStream(des);
+        ftp.retrieveFile(source, fileOutputStream);
+    }
+
+
+
+
 
     public boolean downloadFile() {
         boolean success = false;
