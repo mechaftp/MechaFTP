@@ -87,6 +87,7 @@ public class Client {
      */
     protected FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
+        
         return ftp.listDirectories(path);
     }
 
