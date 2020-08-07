@@ -2,7 +2,10 @@ package edu.pdx.cs;
 
 import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
@@ -23,7 +26,7 @@ public class Client {
         state = new ClientState();
     }
 
-    Client(Logger logger, Path logpath, FTPClient ftp){
+    Client(Logger logger, Path logpath, FTPClient ftp, ClientState state){
         this.logger = logger;
         this.logpath = logpath;
         this.ftp = ftp;
@@ -144,12 +147,25 @@ public class Client {
     }
 
     /**
-     * Path getter function
-     * @return path
+     * This function retrieves a file from the server.
+     * @param remote file name in the remote server
+     * @return
+     * @throws IOException
      */
-    public Path getPath(){
-        return this.logpath;
+    public boolean retrieveFiles(String remote)throws IOException{
+
+        FileOutputStream stream = new FileOutputStream("~/Downloads/" + remote);
+        boolean getFile = ftp.retrieveFile(remote,stream);
+
+        if (getFile) {
+            logger.info("File" + remote  + "retrieved from the server!");
+            stream.close();
+        } else {
+            logger.error("Failed retrieval for: ", remote);
+        }
+        return getFile;
     }
+
 
 
     /**
