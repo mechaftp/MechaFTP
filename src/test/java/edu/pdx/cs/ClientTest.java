@@ -110,19 +110,18 @@ public class ClientTest {
         //FileOutputStream stream = new FileOutputStream("~/Downloads/" );
         //String username = "aang";
 
-//        Client client = new Client();
+          Client client = new Client();
 //        client.connect(HOSTNAME, Integer.parseInt(PORT));
 //        client.login("aang", "katara");
 
         FileOutputStream out = mock( FileOutputStream.class);
-        when()
+        when(ftp.retrieveFiles)
         assertThat(client.retrieveFiles("~/Downloads/"), equalTo(true));
     }
 
 
     @Test
     public void testLogoutSuccess() throws IOException{
-        //String username = "apple,";
         Logger logger = mock(Logger.class);
         Path path = mock(Path.class);
         FTPClient ftp = mock(FTPClient.class);

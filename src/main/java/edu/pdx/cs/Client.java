@@ -154,15 +154,16 @@ public class Client {
      */
     public boolean retrieveFiles(String remote)throws IOException{
 
-        FileOutputStream stream = new FileOutputStream("~/Downloads/" + remote);
+        FileOutputStream stream = new FileOutputStream( remote);
         boolean getFile = ftp.retrieveFile(remote,stream);
 
         if (getFile) {
             logger.info("File" + remote  + "retrieved from the server!");
-            stream.close();
         } else {
             logger.error("Failed retrieval for: ", remote);
         }
+
+        stream.close();
         return getFile;
     }
 
