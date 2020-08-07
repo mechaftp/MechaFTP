@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.IOException;
 import org.mockftpserver.fake.FakeFtpServer;
+import java.util.ArrayList;
 
 
 // This should probably be refactored into a different name
@@ -92,6 +93,38 @@ public class ClientTest {
         client.login("aang", "katara");
 
         assertThat(client.changeDirectory("testDir"), equalTo(true));
+    }
+
+    @Test
+    public void testListDirectoriesLocal() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        ArrayList<String> dirs = client.listDirectoriesLocal();
+        StringBuilder allDirs = new StringBuilder();
+        for(String dir:dirs)
+            allDirs.append(dir + "   ");
+
+        assertThat(allDirs.toString(), containsString("target"));
+        assertThat(allDirs.toString(), containsString(".mvn"));
+        assertThat(allDirs.toString(), not(containsString("pom.xml")));
+    }
+
+    @Test
+    public void testListFilesLocal() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        ArrayList<String> files = client.listFilesLocal();
+        StringBuilder allFiles = new StringBuilder();
+        for(String file:files)
+            allFiles.append(file + "   ");
+
+        assertThat(allFiles.toString(), not(containsString("target")));
+        assertThat(allFiles.toString(), not(containsString(".mvn")));
+        assertThat(allFiles.toString(), containsString("pom.xml"));
     }
 
     @After

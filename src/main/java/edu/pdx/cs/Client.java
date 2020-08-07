@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.File;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
 
 public class Client {
 
@@ -83,6 +87,7 @@ public class Client {
      */
     protected FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
+        
         return ftp.listDirectories(path);
     }
 
@@ -141,6 +146,40 @@ public class Client {
         }
 
         return success;
+    }
+
+    /**
+     * Determines directories w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of directory names w/in the cwd
+     */
+    public ArrayList<String> listDirectoriesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] directories = cwd.listFiles();
+        ArrayList<String> dirNames = new ArrayList<>();
+
+        for(File dir:directories) {
+            if(dir.isDirectory())
+                dirNames.add(dir.getName());
+        }
+
+        return dirNames;
+    }
+
+    /**
+     * Determines files w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of file names w/in the cwd
+     */
+    public ArrayList<String> listFilesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] files = cwd.listFiles();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        for(File file:files) {
+            if(!file.isDirectory())
+                fileNames.add(file.getName());
+        }
+
+        return fileNames;
     }
 
     public boolean logout(String username)throws IOException{
