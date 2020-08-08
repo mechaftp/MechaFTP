@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListRemoteDirCommand extends BaseCommand {
+public class ListRemoteFileCommand extends BaseCommand {
 
-    public ListRemoteDirCommand(Client client, List<String> arguments) {
+    public ListRemoteFileCommand(Client client, List<String> arguments) {
         super(client, arguments);
         expectNSubarguments(0);
     }
@@ -23,12 +23,12 @@ public class ListRemoteDirCommand extends BaseCommand {
         }
         try
         {
-            state.output("Retrieving directory information...");
-            FTPFile[] dirs = client.listRemoteDirectories();
-            ArrayList<String> dirNames = client.fileDirectoryListStrings(dirs);
+            state.output("Retrieving file information...");
+            FTPFile[] dirs = client.listRemoteFiles();
+            ArrayList<String> fileNames = client.fileDirectoryListStrings(dirs);
 
-            for (String dirName : dirNames) {
-                state.output(dirName);
+            for (String fileName : fileNames) {
+                state.output(fileName);
             }
             return true;
         }
