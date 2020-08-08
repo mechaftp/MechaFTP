@@ -15,63 +15,13 @@ import java.util.Map;
 public class IOHandler {
     private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private Validator validator = new Validator();
-    private ArgumentParser parser;
-    private Namespace namespace;
-    private List<String> tokens;
+    public List<String> tokens;
     private Client client;
     public boolean quitting;
 
 
     IOHandler(Client client) {
         this.client = client;
-
-        parser = configureArgParser();
-    }
-
-    private ArgumentParser configureArgParser()
-    {
-        ArgumentParser parse = ArgumentParsers.newFor("MechaFTP")
-            .addHelp(true)
-            .build()
-            .description("FTPClient for Agile");
-        parse.addArgument( "--login")
-            .nargs(2)
-            .help("--login username password");
-        parse.addArgument("--quit")
-            .help("quit MechaFTP");
-
-        return parse;
-    }
-
-    /**
-     * This should use argparse4j
-     * @return Map<String, Object>
-     * @throws IOException
-     */
-    Map<String, Object> getInput() throws IOException {
-        String input = this.bufferedReader.readLine();
-
-        try {
-            this.namespace = parser.parseArgs(input.split("\\s+"));
-        } catch (ArgumentParserException e) {
-            this.parser.printHelp();
-        }
-        String commandString = (String) this.namespace.getAttrs().keySet().toArray()[0];
-
-        // Validate the command
-        boolean isValid = false;
-        switch (commandString) {
-            case "--login":
-                isValid = this.validator.dummyValidate();
-                break;
-        }
-
-        if (!isValid) {
-            return null;
-        } else {
-            return this.namespace.getAttrs();
-        }
-
     }
 
     public void readInput()
@@ -93,14 +43,18 @@ public class IOHandler {
         Command command;
         try
         {
-            switch (tokens.get(0).toLowerCase())
+            switch (tokens.get(0))
             {
                 case "login":
                     command = CommandFactory.createLogin(client, subarguments);
                     break;
+                case "listRemoteDirectories":
+                    command = CommandFactory.createListRemoteDirectories(client, subarguments);
+                    break;
                 case "quit":
                     quitting = true;
                 default:
+                    client.state.output("Invalid Command");
                     command = CommandFactory.createNull(client, subarguments);
             }
         }

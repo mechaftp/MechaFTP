@@ -10,6 +10,9 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class MechaFTP
 {
@@ -19,6 +22,7 @@ public class MechaFTP
     private static IOHandler ioHandler;
     private static Client client;
     private static Validator validator;
+    private static BlockingQueue<Command> blockingQueue = new LinkedBlockingDeque<>();
 
     public static void main(String[] args) throws IOException {
         startup(args);
@@ -78,6 +82,7 @@ public class MechaFTP
     private static void run()
     {
         Command command;
+        ArrayList<Command> commands = new ArrayList<>();
         do
         {
             // statusBar will use client state to output to user
@@ -85,9 +90,14 @@ public class MechaFTP
 
             ioHandler.readInput();
             command = ioHandler.parseInput();
+            blockingQueue.add(command);
 
             // command may update and/or use client state
-            command.execute(client.state);
+            blockingQueue.drainTo(commands);
+            for (Command toExec : commands) {
+                toExec.execute(client.state);
+            }
+            commands.clear();
 
         } while (!ioHandler.quitting);
     }

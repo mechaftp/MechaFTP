@@ -117,7 +117,7 @@ public class Client {
      * @return <code>ArrayList</code> of names in <code>String</code> format
      */
     public ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
-       ArrayList<String> names = null;
+       ArrayList<String> names = new ArrayList<>();
 
        for(FTPFile file:files)
            names.add(file.getName());
