@@ -35,8 +35,8 @@ public class ValidatorTest {
 
     @Test
     public void testDirectoryPath() throws IOException{
-        String goodPath1 = "src/test/";
-        String goodPath2 = "resources/wiki/";
+        String goodPath1 = "src/test";
+        String goodPath2 = "resources/wiki";
         String badPath = "src/bad/";
         Validator val = new Validator();
 

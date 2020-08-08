@@ -15,6 +15,7 @@ public class NullCommand extends BaseCommand
     @Override
     public boolean execute(ClientState state)
     {
+        state.output("Executed the Null command.");
         return true;
     }
 }

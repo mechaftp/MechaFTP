@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.io.File;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -18,20 +16,12 @@ public class Client {
 
     private static Logger logger;
     public ClientState state;
-    Path logpath;
     FTPClient ftp;
 
     Client(){
-        logger =  LogManager.getLogger(Log4jExample.class);
+        logger =  LogManager.getLogger(Client.class);
         ftp = new FTPClient();
         state = new ClientState();
-    }
-
-    Client(Logger logger, Path logpath, FTPClient ftp){
-        this.logger = logger;
-        this.logpath = logpath;
-        this.ftp = ftp;
-        this.state = new ClientState();
     }
 
     public void connect(String server, int port)
@@ -76,16 +66,11 @@ public class Client {
         return status;
     }
 
-    void setLogfile(Path logpath)
-    {
-        this.logpath = logpath;
-    }
-
     /**
      * Lists directories w/in the current working directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteDirectories() throws IOException {
+    public FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
         FTPFile[] directories = ftp.listDirectories(path);
 
@@ -105,7 +90,7 @@ public class Client {
      * Lists files w/in the current directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteFiles() throws IOException{
+    public FTPFile[] listRemoteFiles() throws IOException{
         String path = ftp.printWorkingDirectory();
 
         FTPFile[] files =  ftp.listFiles(path, new FTPFileFilter() {
@@ -131,7 +116,7 @@ public class Client {
      * @param files array of <code>FTPFiles</code> objects
      * @return <code>ArrayList</code> of names in <code>String</code> format
      */
-    protected ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
+    public ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
        ArrayList<String> names = null;
 
        for(FTPFile file:files)
@@ -143,9 +128,10 @@ public class Client {
     /**
      * Returns <code>String</code> of the current working directory
      * @return current working directory
-     * @throws IOException
+     * @throws IOException If the FTP connection is closed unexpectedly or
+     * if an error occurs while sending to or receiving from the server.
      */
-    protected String printWorkingDirectory() throws IOException{
+    public String printWorkingDirectory() throws IOException{
         return ftp.printWorkingDirectory();
     }
 
@@ -154,7 +140,7 @@ public class Client {
      * @param dir ...to the given directory relative to the current working directory
      * @return true if the path change was successful, false otherwise
      */
-    protected boolean changeDirectory(String dir){
+    public boolean changeDirectory(String dir){
         boolean success = false;
 
         try {
