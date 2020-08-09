@@ -106,6 +106,7 @@ public class ClientTest {
         for(String dir:dirs)
             allDirs.append(dir + "   ");
 
+        System.out.println(allDirs);
         assertThat(allDirs.toString(), containsString("target"));
         assertThat(allDirs.toString(), containsString(".mvn"));
         assertThat(allDirs.toString(), not(containsString("pom.xml")));

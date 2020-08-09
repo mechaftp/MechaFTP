@@ -98,7 +98,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testListLocalFilesCommand() throws IOException {
+    public void testListLocalDirsCommand() throws IOException {
         String username = "aang";
         String password = "katara";
 

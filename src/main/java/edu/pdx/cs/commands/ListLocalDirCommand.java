@@ -20,6 +20,7 @@ public class ListLocalDirCommand extends BaseCommand {
 
         for (String dirName : dirNames) {
             state.output(dirName);
+            System.out.println(dirName);
         }
         return true;
 
