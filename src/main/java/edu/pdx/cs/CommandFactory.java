@@ -21,6 +21,10 @@ public class CommandFactory {
         return new ListLocalDirCommand(client, subarguments);
     }
 
+    public static Command createListLocalFiles(Client client, List<String> subarguments){
+        return new ListLocalFilesCommand(client, subarguments);
+    }
+
     public static Command createNull(Client client, List<String> subarguments)
     {
         return new NullCommand(client, subarguments);
