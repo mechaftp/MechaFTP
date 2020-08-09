@@ -7,16 +7,17 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
+import java.io.File;
 
 import org.apache.commons.net.io.Util;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+
 public class Client {
 
     private static Logger logger;
     public ClientState state;
-    Path logpath;
     FTPClient ftp;
 
     Client(){
@@ -25,9 +26,8 @@ public class Client {
         state = new ClientState();
     }
 
-    Client(Logger logger, Path logpath, FTPClient ftp, ClientState state){
+    Client(Logger logger, FTPClient ftp, ClientState state){
         this.logger = logger;
-        this.logpath = logpath;
         this.ftp = ftp;
         this.state = state;
     }
@@ -67,32 +67,38 @@ public class Client {
     public boolean login (String username, String password) throws IOException {
         boolean status = ftp.login(username, password);
         if (status) {
-            logger.info("Logged in as: ", username);
+            logger.info("Logged in as: " + username);
         } else {
-            logger.error("Failed login for: ", username);
+            logger.error("Failed login for: " + username);
         }
         return status;
-    }
-
-    void setLogfile(Path logpath)
-    {
-        this.logpath = logpath;
     }
 
     /**
      * Lists directories w/in the current working directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteDirectories() throws IOException {
+    public FTPFile[] listRemoteDirectories() throws IOException {
         String path = ftp.printWorkingDirectory();
-        return ftp.listDirectories(path);
+        FTPFile[] directories = ftp.listDirectories(path);
+
+        //log
+        if(directories == null)
+            logger.info("No directories from remote server added to list");
+        else {
+            for (FTPFile dir : directories) {
+                logger.info("Directory " + dir.getName() + " from remote server added to list");
+            }
+        }
+
+        return directories;
     }
 
     /**
      * Lists files w/in the current directory on remote server
      * @return an array of <code>FTPFile</code> objects
      */
-    protected FTPFile[] listRemoteFiles() throws IOException{
+    public FTPFile[] listRemoteFiles() throws IOException{
         String path = ftp.printWorkingDirectory();
 
         FTPFile[] files =  ftp.listFiles(path, new FTPFileFilter() {
@@ -102,6 +108,14 @@ public class Client {
             }
         });
 
+        //log
+        if(files == null)
+            logger.info("No files from remote server added to list");
+        else{
+            for(FTPFile file : files)
+               logger.info("File " + file.getName() + " from remote server added to list");
+        }
+
         return files;
     }
 
@@ -110,7 +124,7 @@ public class Client {
      * @param files array of <code>FTPFiles</code> objects
      * @return <code>ArrayList</code> of names in <code>String</code> format
      */
-    protected ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
+    public ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
        ArrayList<String> names = null;
 
        for(FTPFile file:files)
@@ -122,9 +136,10 @@ public class Client {
     /**
      * Returns <code>String</code> of the current working directory
      * @return current working directory
-     * @throws IOException
+     * @throws IOException If the FTP connection is closed unexpectedly or
+     * if an error occurs while sending to or receiving from the server.
      */
-    protected String printWorkingDirectory() throws IOException{
+    public String printWorkingDirectory() throws IOException{
         return ftp.printWorkingDirectory();
     }
 
@@ -133,7 +148,7 @@ public class Client {
      * @param dir ...to the given directory relative to the current working directory
      * @return true if the path change was successful, false otherwise
      */
-    protected boolean changeDirectory(String dir){
+    public boolean changeDirectory(String dir){
         boolean success = false;
 
         try {
@@ -142,7 +157,57 @@ public class Client {
             e.printStackTrace();
         }
 
+        if(success)
+            logger.info("Changed to directory " + dir + " on remote server");
+        else
+            logger.error("Failed to change to directory " + dir + " on remote server");
+
         return success;
+    }
+
+    /**
+     * Determines directories w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of directory names w/in the cwd
+     */
+    public ArrayList<String> listDirectoriesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] directories = cwd.listFiles();
+        ArrayList<String> dirNames = new ArrayList<>();
+
+
+        if(directories == null)
+            logger.info("No directories from local machine added to list");
+        else {
+            for (File dir : directories) {
+                if (dir.isDirectory())
+                    dirNames.add(dir.getName());
+                logger.info("Directory " + dir.getName() + " from local machine added to list");
+            }
+        }
+
+        return dirNames;
+    }
+
+    /**
+     * Determines files w/in the current working directory on local machine
+     * @return an <code>ArrayList</code> of file names w/in the cwd
+     */
+    public ArrayList<String> listFilesLocal(){
+        File cwd = new File(state.getLocalCwdString());
+        File[] files = cwd.listFiles();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        if(files == null)
+            logger.info("No files from local machine added to list");
+        else {
+            for (File file : files) {
+                if (!file.isDirectory())
+                    fileNames.add(file.getName());
+                logger.info("File " + file.getName() + " from local machine added to list");
+            }
+        }
+
+        return fileNames;
     }
 
     /**

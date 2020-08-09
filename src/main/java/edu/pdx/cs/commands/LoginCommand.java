@@ -4,6 +4,8 @@ import edu.pdx.cs.Client;
 import edu.pdx.cs.ClientState;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class LoginCommand extends BaseCommand
@@ -24,8 +26,17 @@ public class LoginCommand extends BaseCommand
             throw new IllegalStateException("Attempted execution before assigning input.");
         try
         {
-            state.setLoggedIn(client.login(username, password));
-            return true;
+            boolean result = client.login(username, password);
+            state.setLoggedIn(result);
+            if (result)
+            {
+                state.output("Logged into server as " + username + ".");
+                state.setRemoteCwd(Paths.get(client.printWorkingDirectory()));
+            }
+            else
+                state.output("Failed to log into server with username " + username + ".");
+
+            return result;
         }
         catch (IOException e)
         {

@@ -12,14 +12,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Arrays;
 
 import org.mockftpserver.fake.FakeFtpServer;
-import org.mockito.Mockito;
+import java.util.ArrayList;
 
 
 // This should probably be refactored into a different name
@@ -161,22 +158,51 @@ public class ClientTest {
     @Test
     public void testLogoutSuccess() throws IOException{
         Logger logger = mock(Logger.class);
-        Path path = mock(Path.class);
         FTPClient ftp = mock(FTPClient.class);
         ClientState state = mock(ClientState.class);
         when(ftp.logout()).thenReturn(true);
 
-        Client client = new Client(logger, path, ftp, state);
+        Client client = new Client(logger, ftp, state);
 
         assertTrue(client.logout("apple"));
         verify(logger).info("User apple is logging out!");
     }
 
 
+    @Test
+    public void testListDirectoriesLocal() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        ArrayList<String> dirs = client.listDirectoriesLocal();
+        StringBuilder allDirs = new StringBuilder();
+        for(String dir:dirs)
+            allDirs.append(dir + "   ");
+
+        assertThat(allDirs.toString(), containsString("target"));
+        assertThat(allDirs.toString(), containsString(".mvn"));
+        assertThat(allDirs.toString(), not(containsString("pom.xml")));
+    }
+
+    @Test
+    public void testListFilesLocal() throws IOException{
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        ArrayList<String> files = client.listFilesLocal();
+        StringBuilder allFiles = new StringBuilder();
+        for(String file:files)
+            allFiles.append(file + "   ");
+
+        assertThat(allFiles.toString(), not(containsString("target")));
+        assertThat(allFiles.toString(), not(containsString(".mvn")));
+        assertThat(allFiles.toString(), containsString("pom.xml"));
+    }
+
     @After
     public void teardown() {
         server.stop();
     }
-
-
 }

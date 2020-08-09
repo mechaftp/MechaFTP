@@ -7,6 +7,7 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 
@@ -19,8 +20,7 @@ public class MechaFTP
     private static Client client;
     private static Validator validator;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws IOException {
         startup(args);
 
         run();
@@ -28,8 +28,7 @@ public class MechaFTP
         cleanup();
     }
 
-    private static void startup(String[] args)
-    {
+    private static void startup(String[] args) throws IOException {
         ArgumentParser parser = ArgumentParsers
             .newFor("MechaFTP")
             .build()
@@ -69,12 +68,11 @@ public class MechaFTP
         ioHandler = new IOHandler(client);
         statusBar = StatusBar.create(out);
 
-
-        if (ns.get("logfile") != null && !validator.validatePath(ns.get("logfile"))) {
-            System.err.println("Invalid log argument");
-        } else {
-            client.setLogfile(Paths.get((String) ns.get("logfile")));
-        }
+//        if (ns.get("logfile") != null && !validator.validatePath(ns.get("logfile"))) {
+//            System.err.println("Invalid log argument");
+//        } else {
+//            client.state.setLogFile(Paths.get((String) ns.get("logfile")));
+//        }
     }
 
     private static void run()

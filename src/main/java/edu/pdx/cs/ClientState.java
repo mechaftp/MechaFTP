@@ -3,7 +3,6 @@ package edu.pdx.cs;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ClientState
 {
@@ -11,6 +10,8 @@ public class ClientState
     private Path localCwd;
     private Path remoteCwd;
     private boolean loggedIn;
+    private Path logFileLocation;
+    private ArrayList<String> commandOutput = new ArrayList<>();
 
     public ClientState()
     {
@@ -56,4 +57,23 @@ public class ClientState
     {
         this.loggedIn = loggedIn;
     }
+
+    public void setLogFile(Path logpath)
+    {
+        this.logFileLocation = logpath;
+    }
+
+    public Path getLogFilePath() { return this.logFileLocation; }
+
+    public ArrayList<String> getCommandOutput()
+    {
+        return commandOutput;
+    }
+
+    public void clearCommandOutput()
+    {
+        commandOutput.clear();
+    }
+
+    public void output(String line) { commandOutput.add(line); }
 }
