@@ -109,14 +109,15 @@ public class ClientTest {
 
         //FileOutputStream stream = new FileOutputStream("~/Downloads/" );
         //String username = "aang";
-          String remote = "my_cabbages.wav";
+    //    /data/bumi/my_cabbages.wav"
+           String remote = "my_cabbages.wav";
           Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("bumi", "password");
 
         FileOutputStream out = mock( FileOutputStream.class);
         when(client.retrieveFiles(remote));
-        assertThat(client.retrieveFiles("~/Downloads/"), equalTo(true));
+        assertThat(client.retrieveFiles("/data/bumi/my_cabbages.wav"), equalTo(true));
     }
 
 
