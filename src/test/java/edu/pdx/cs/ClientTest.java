@@ -13,6 +13,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -118,6 +119,42 @@ public class ClientTest {
         client.login("aang", "katara");
 
         assertThat(client.retrieveFile(remote), equalTo(true));
+    }
+
+
+    @Test
+    public void testuploadFile() throws IOException{
+
+        String local = "upload_file.txt";
+        File file = new File(local);
+        file.createNewFile();
+
+
+        FileWriter fw = new FileWriter(local);
+        fw.write("Testing File uploading to server");
+        fw.close();
+
+        file.deleteOnExit();
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+       assertThat(client.uploadFile(file), equalTo(true));
+    }
+
+    @Test
+    public void testUploadFileNotExistLocally() throws IOException{
+
+        String local = "filenotexist.txt";
+        File file = new File(local);
+        file.deleteOnExit();
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.uploadFile(file), equalTo(false));
     }
 
 

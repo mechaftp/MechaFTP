@@ -156,15 +156,39 @@ public class Client {
 
         if(!ftp.retrieveFile(file, output))
         {
-            System.err.println("Can't download file!");
+            logger.error("Can't download file!");
             return false;
         }
 
         output.close();
-        logger.info("File" + file + "retrieved from the server!");
+        logger.info("File" + file + " retrieved from the server!");
         return true;
     }
 
+    /**
+     * This function uploads a files to the server
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public boolean uploadFile(File file) throws IOException {
+
+        if(!file.exists()){
+            logger.error("Passed File not created on local machine. It can't be upload to sever");
+            return false;
+        }
+
+        FileInputStream input = new FileInputStream(file);
+
+        if((!ftp.storeFile(file.getName(), input))){
+            logger.error("File  " + file.getName() + " can't upload ");
+            return false;
+        }
+
+        input.close();
+        logger.info("File " + file.getName() + " uploaded ");
+        return  true;
+    }
 
 
     /**

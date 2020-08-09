@@ -53,9 +53,9 @@ public class FakeFtpServerFactory {
         data.setGroup("users");
 
         DirectoryEntry aang = new DirectoryEntry("/data/aang");
-        aang.setPermissions(new Permissions("rwxr-xr-x"));
-        aang.setOwner("aang");
-        aang.setGroup("users");
+//        aang.setPermissions(new Permissions("rwxr-xr-x"));
+//        aang.setOwner("aang");
+//        aang.setGroup("users");
 
         DirectoryEntry bumi = new DirectoryEntry("/data/bumi");
         bumi.setPermissions(new Permissions("rw-rw-r--"));
