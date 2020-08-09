@@ -11,9 +11,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import org.mockftpserver.fake.FakeFtpServer;
 import org.mockito.Mockito;
@@ -107,17 +109,15 @@ public class ClientTest {
     @Test
     public void testRetrieveFileMethod() throws IOException {
 
-        //FileOutputStream stream = new FileOutputStream("~/Downloads/" );
-        //String username = "aang";
-    //    /data/bumi/my_cabbages.wav"
-           String remote = "my_cabbages.wav";
-          Client client = new Client();
-        client.connect(HOSTNAME, Integer.parseInt(PORT));
-        client.login("bumi", "password");
+        String remote = "love_note";
+        File momo = new File(remote);
+        momo.deleteOnExit();
 
-        FileOutputStream out = mock( FileOutputStream.class);
-        when(client.retrieveFiles(remote));
-        assertThat(client.retrieveFiles("/data/bumi/my_cabbages.wav"), equalTo(true));
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.retrieveFile(remote), equalTo(true));
     }
 
 

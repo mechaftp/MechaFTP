@@ -3,13 +3,12 @@ package edu.pdx.cs;
 import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
 
+import org.apache.commons.net.io.Util;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -21,7 +20,7 @@ public class Client {
     FTPClient ftp;
 
     Client(){
-        logger =  LogManager.getLogger(Log4jExample.class);
+        logger =  LogManager.getLogger(Client.class);
         ftp = new FTPClient();
         state = new ClientState();
     }
@@ -30,7 +29,7 @@ public class Client {
         this.logger = logger;
         this.logpath = logpath;
         this.ftp = ftp;
-        this.state = new ClientState();
+        this.state = state;
     }
 
     public void connect(String server, int port)
@@ -148,23 +147,22 @@ public class Client {
 
     /**
      * This function retrieves a file from the server.
-     * @param remote file name in the remote server
+     * @param file file name in the remote server
      * @return
      * @throws IOException
      */
-    public boolean retrieveFiles(String remote)throws IOException{
-        //
-        FileOutputStream stream = new FileOutputStream( remote);
-        boolean getFile = ftp.retrieveFile(remote,stream);
+    public boolean retrieveFile(String file)throws IOException{
+        FileOutputStream output = new FileOutputStream(file);
 
-        if (getFile) {
-            logger.info("File" + remote  + "retrieved from the server!");
-        } else {
-            logger.error("Failed retrieval for: ", remote);
+        if(!ftp.retrieveFile(file, output))
+        {
+            System.err.println("Can't download file!");
+            return false;
         }
 
-        stream.close();
-        return getFile;
+        output.close();
+        logger.info("File" + file + "retrieved from the server!");
+        return true;
     }
 
 
