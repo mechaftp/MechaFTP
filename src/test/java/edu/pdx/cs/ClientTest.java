@@ -109,13 +109,13 @@ public class ClientTest {
 
         //FileOutputStream stream = new FileOutputStream("~/Downloads/" );
         //String username = "aang";
-
+          String remote = "my_cabbages.wav";
           Client client = new Client();
-//        client.connect(HOSTNAME, Integer.parseInt(PORT));
-//        client.login("aang", "katara");
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("bumi", "password");
 
         FileOutputStream out = mock( FileOutputStream.class);
-        when(ftp.retrieveFiles)
+        when(client.retrieveFiles(remote));
         assertThat(client.retrieveFiles("~/Downloads/"), equalTo(true));
     }
 
