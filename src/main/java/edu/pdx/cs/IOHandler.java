@@ -54,6 +54,9 @@ public class IOHandler {
                 case "listRemoteFiles":
                     command = CommandFactory.createListRemoteFiles(client, subarguments);
                     break;
+                case "listLocalDirectories":
+                    command = CommandFactory.createListLocalDirectories(client, subarguments);
+                    break;
                 case "quit":
                     quitting = true;
                 default:

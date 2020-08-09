@@ -96,4 +96,24 @@ public class CommandTests {
 
         assertThat(success, equalTo(true));
     }
+
+    @Test
+    public void testListLocalFilesCommand() throws IOException {
+        String username = "aang";
+        String password = "katara";
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        IOHandler ioHandler = new IOHandler(client);
+
+        ioHandler.tokens = List.of("login", username, password);
+        Command loginCommand = ioHandler.parseInput();
+        loginCommand.execute(client.state);
+
+        ioHandler.tokens = List.of("listLocalDirectories");
+        Command listLocalDirCommand = ioHandler.parseInput();
+        boolean success = listLocalDirCommand.execute(client.state);
+
+        assertThat(success, equalTo(true));
+    }
 }
