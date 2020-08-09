@@ -53,9 +53,9 @@ public class FakeFtpServerFactory {
         data.setGroup("users");
 
         DirectoryEntry aang = new DirectoryEntry("/data/aang");
-        aang.setPermissions(new Permissions("rw-r--r--"));
-        aang.setOwner("aang");
-        aang.setGroup("users");
+//        aang.setPermissions(new Permissions("rwxr-xr-x"));
+//        aang.setOwner("aang");
+//        aang.setGroup("users");
 
         DirectoryEntry bumi = new DirectoryEntry("/data/bumi");
         bumi.setPermissions(new Permissions("rw-rw-r--"));
@@ -78,14 +78,8 @@ public class FakeFtpServerFactory {
         file1.setGroup("users");
 
         FileEntry file2 = new FileEntry("/data/aang/love_note", "oh sokka, you always make me giggle!");
-        file2.setPermissions(new Permissions("rwxr-xr-x"));
-        file2.setOwner("aang");
-        file2.setGroup("users");
 
         FileEntry file3 = new FileEntry("/data/aang/momo.gif", "animation of momo eating pie");
-        file3.setPermissions(new Permissions("rw-r--r--"));
-        file3.setOwner("aang");
-        file3.setGroup("users");
 
         FileEntry file4 = new FileEntry("/data/bumi/my_cabbages.wav", "myyyyyyyyyy cabbaggeeeeeeeeessssss!!!!");
         file4.setPermissions(new Permissions("r--r--r--"));
