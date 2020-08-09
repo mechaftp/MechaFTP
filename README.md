@@ -2,7 +2,7 @@
 
 Portable Java FTP command line client created for Agile and Open Source Software at Portland State University.
 
-![MechaFTP Demo][https://raw.githubusercontent.com/mechaftp/MechaFTP/assets/images/mechaftp-loop.gif]
+![MechaFTP Demo](https://raw.githubusercontent.com/mechaftp/MechaFTP/assets/images/mechaftp-loop.gif)
 
 ## Getting started
 
