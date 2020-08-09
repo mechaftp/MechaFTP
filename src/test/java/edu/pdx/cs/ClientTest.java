@@ -11,6 +11,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -110,15 +112,45 @@ public class ClientTest {
         //FileOutputStream stream = new FileOutputStream("~/Downloads/" );
         //String username = "aang";
     //    /data/bumi/my_cabbages.wav"
-           String remote = "my_cabbages.wav";
+           String dir = "data/aang";
+           String filename = "momo.gif";
+
           Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
-        client.login("bumi", "password");
+        client.login("aang", "katara");
 
-        FileOutputStream out = mock( FileOutputStream.class);
-        when(client.retrieveFiles(remote));
-        assertThat(client.retrieveFiles("/data/bumi/my_cabbages.wav"), equalTo(true));
+    //    FileOutputStream out = mock( FileOutputStream.class);
+    //    when(client.retrieveFiles(remote)).thenReturn(false);
+        assertThat(client.retrieveFiles(dir, filename), equalTo(true));
     }
+
+    @Test
+    public void testStoreFiles() throws IOException{
+
+        boolean result = false;
+        //Connecting and login to FTP server
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang" , "katara");
+
+
+        // creating a File
+        String filename = "WOW.txt";
+        File file = new File(filename);
+
+
+      result = client.storeFiles(file, "/data/aang/");
+
+      if(result){
+          System.out.println("Success");
+      }else {
+          System.out.println("Fail");
+      }
+      //  assertThat(result, true);
+
+
+    }
+
 
 
     @Test

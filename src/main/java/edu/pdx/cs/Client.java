@@ -3,9 +3,7 @@ package edu.pdx.cs;
 import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
@@ -152,19 +150,49 @@ public class Client {
      * @return
      * @throws IOException
      */
-    public boolean retrieveFiles(String remote)throws IOException{
-        //
-        FileOutputStream stream = new FileOutputStream( remote);
-        boolean getFile = ftp.retrieveFile(remote,stream);
+    public boolean retrieveFiles(String dir, String filename)throws IOException{
+        boolean success = false;
+
+//        File download = new File("\\MechaFTP\\");
+//        OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(download));
+
+
+        FileOutputStream stream = new FileOutputStream(filename);
+        boolean getFile = ftp.retrieveFile(filename,stream);
 
         if (getFile) {
-            logger.info("File" + remote  + "retrieved from the server!");
+            logger.info("File " + filename + " retrieved from the server!");
+            success = true;
         } else {
-            logger.error("Failed retrieval for: ", remote);
+            logger.error("Failed retrieval for: " + filename);
         }
 
         stream.close();
         return getFile;
+    }
+
+
+    /**
+     * This function Store a file to server
+     * @param file
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public boolean storeFiles(File file, String path) throws IOException{
+
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        boolean uploadFile = ftp.storeFile(path, fileInputStream);
+
+        if(uploadFile){
+            logger.info("File " + file.getName() + " uploaded to server!");
+        }else{
+            logger.error("Failed uploading file ", file );
+        }
+        fileInputStream.close();
+        return uploadFile;
+
     }
 
 
