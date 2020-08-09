@@ -48,6 +48,9 @@ public class IOHandler {
                 case "login":
                     command = CommandFactory.createLogin(client, subarguments);
                     break;
+                case "logout":
+                    command = CommandFactory.createLogout(client, subarguments);
+                    break;
                 case "listRemoteDirectories":
                     command = CommandFactory.createListRemoteDirectories(client, subarguments);
                     break;

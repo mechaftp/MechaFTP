@@ -58,6 +58,30 @@ public class CommandTests {
     }
 
     @Test
+    public void testLogoutCommand() throws IOException {
+        String username = "aang";
+        String password = "katara";
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        IOHandler ioHandler = new IOHandler(client);
+
+        ioHandler.tokens = List.of("login", username, password);
+        Command loginCommand = ioHandler.parseInput();
+
+        assertThat(client.state.getLoggedIn(), equalTo(false));
+        loginCommand.execute(client.state);
+        assertThat(client.state.getLoggedIn(), equalTo(true));
+
+        ioHandler.tokens = List.of("logout", username);
+        Command logoutCommand = ioHandler.parseInput();
+
+        assertThat(client.state.getLoggedIn(), equalTo(true));
+        logoutCommand.execute(client.state);
+        assertThat(client.state.getLoggedIn(), equalTo(false));
+    }
+
+    @Test
     public void testListRemoteDirCommand() throws IOException {
         String username = "aang";
         String password = "katara";

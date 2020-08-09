@@ -9,6 +9,10 @@ public class CommandFactory {
         return new LoginCommand(client, subarguments);
     }
 
+    public static Command createLogout(Client client, List<String> subarguments){
+        return new LogoutCommand(client, subarguments);
+    }
+
     public static Command createListRemoteDirectories(Client client, List<String> subarguments){
         return new ListRemoteDirCommand(client, subarguments);
     }
