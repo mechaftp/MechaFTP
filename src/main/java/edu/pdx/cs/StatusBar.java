@@ -2,10 +2,11 @@ package edu.pdx.cs;
 
 import java.io.Closeable;
 import java.io.PrintStream;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 import org.fusesource.jansi.AnsiConsole;
-
 import static org.fusesource.jansi.Ansi.*;
 
 public class StatusBar implements Closeable
@@ -25,7 +26,23 @@ public class StatusBar implements Closeable
 
     public void render(ClientState state)
     {
-        // Print command output???
+        // Print top of statusbar and time.
+        out.println(ansi()
+            .fgCyan().a("╔ ")
+            .fgYellow()
+            .a(LocalDateTime.now()
+                .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT))));
+
+        // Print command output
+        for (String line : state.getCommandOutput())
+        {
+            out.println(ansi()
+                .fgCyan().a("║ ")
+                .fg(Color.WHITE).a(line));
+        }
+
+        // Clear the printed output
+        state.clearCommandOutput();
 
         // format the status bar
         int localLen = state.getLocalCwdString().length();
