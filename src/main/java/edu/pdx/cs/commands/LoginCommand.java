@@ -35,7 +35,7 @@ public class LoginCommand extends BaseCommand
             }
             else
                 state.output("Failed to log into server with username " + username + ".");
-
+            
             return result;
         }
         catch (IOException e)

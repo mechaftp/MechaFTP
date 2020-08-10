@@ -1,16 +1,11 @@
 package edu.pdx.cs;
 
 import edu.pdx.cs.commands.Command;
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
-import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 
 public class IOHandler {
     private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));

@@ -26,6 +26,9 @@ public class StatusBar implements Closeable
 
     public void render(ClientState state)
     {
+        // Space things out a bit.
+        out.println();
+        
         // Print top of statusbar and time.
         out.println(ansi()
             .fgCyan().a("╔ ")
@@ -47,12 +50,15 @@ public class StatusBar implements Closeable
         // format the status bar
         int localLen = state.getLocalCwdString().length();
         int remoteLen = state.getRemoteCwdString().length();
+
         String localCwdString = localLen > 35 ?
             "..." + state.getLocalCwdString().substring(localLen - 32) :
             state.getLocalCwd().toString();
+
         String remoteCwdString = remoteLen > 33 ?
             "..." + state.getRemoteCwdString().substring(remoteLen - 30) :
             state.getRemoteCwdString();
+
         String status = String.format("%1$-38s  %2$38s", localCwdString, remoteCwdString);
 
         // print the status bar

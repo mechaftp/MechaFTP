@@ -9,7 +9,6 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -71,12 +70,6 @@ public class MechaFTP
         out = ns.get("output");
         ioHandler = new IOHandler(client);
         statusBar = StatusBar.create(out);
-
-        if (ns.get("logfile") != null && !validator.validatePath(ns.get("logfile"))) {
-            System.err.println("Invalid log argument");
-        } else {
-            client.state.setLogFile(Paths.get((String) ns.get("logfile")));
-        }
     }
 
     private static void run()

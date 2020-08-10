@@ -38,7 +38,7 @@ public class Client {
             else
                 ftp.connect(server);
             // TODO: state.setRemoteCwd to the current working directory on server
-            state.setRemoteCwd(Paths.get("/data/aang"));
+            state.setRemoteCwd(Paths.get("not logged in"));
         }
         catch (IOException e)
         {
@@ -205,8 +205,6 @@ public class Client {
     public boolean logout(String username)throws IOException{
         logger.info("User " + username +" is logging out!");
         return ftp.logout();
-        //ftp.disconnect();
-
     }
 
 
