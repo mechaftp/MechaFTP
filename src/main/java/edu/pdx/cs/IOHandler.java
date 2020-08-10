@@ -59,6 +59,12 @@ public class IOHandler {
                 case "quit":
                     command = CommandFactory.createQuit(client, subarguments);
                     break;
+                case "retrieveFile":
+                    command = CommandFactory.createRetrieveFile(client, subarguments);
+                    break;
+                case "uploadFile":
+                    command = CommandFactory.createUploadFile(client, subarguments);
+                    break;
                 default:
                     client.state.output("Invalid Command");
                     command = CommandFactory.createNull(client, subarguments);
