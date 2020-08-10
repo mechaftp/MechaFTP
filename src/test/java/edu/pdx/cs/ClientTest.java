@@ -126,7 +126,6 @@ public class ClientTest {
         File file = new File(local);
         assertThat(file.createNewFile(), equalTo(true));
 
-
         FileWriter fw = new FileWriter(local);
         fw.write("Testing File uploading to server");
         fw.close();
@@ -137,7 +136,7 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-       assertThat(client.uploadFile(file), equalTo(true));
+       assertThat(client.uploadFile(local), equalTo(true));
     }
 
     @Test
@@ -151,7 +150,7 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-        assertThat(client.uploadFile(file), equalTo(false));
+        assertThat(client.uploadFile(local), equalTo(false));
     }
 
 

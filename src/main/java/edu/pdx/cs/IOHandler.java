@@ -56,6 +56,12 @@ public class IOHandler {
                 case "listLocalFiles":
                     command = CommandFactory.createListLocalFiles(client, subarguments);
                     break;
+                case "uploadFile":
+                    command = CommandFactory.createUpload(client, subarguments);
+                    break;
+                case "downloadFile":
+                    command = CommandFactory.createDownload(client, subarguments);
+                    break;
                 case "quit":
                     command = CommandFactory.createQuit(client, subarguments);
                     break;

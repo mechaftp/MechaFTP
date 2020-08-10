@@ -143,22 +143,34 @@ public class Client {
 
     /**
      * Changes the working directory...
-     * @param dir ...to the given directory relative to the current working directory
+     * @param newDir ...to the given directory relative to the current working directory
      * @return true if the path change was successful, false otherwise
      */
-    public boolean changeDirectory(String dir){
+
+    public boolean changeDirectory(String newDir){
         boolean success = false;
 
-        try {
-            success = ftp.changeWorkingDirectory(dir);
-        } catch (IOException e) {
-            e.printStackTrace();
+        //get relative name of current directory
+        String[] split = state.getLocalCwdString().split("/");
+        String cwd = split[split.length-1];  //i.e. the last directory name in the hierarchy
+
+        //if new directory is same as the current working directory
+        if(newDir == cwd)
+            success = true;
+        //otherwise...
+        else {
+            try {
+                success = ftp.changeWorkingDirectory(newDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
+        //log
         if(success)
-            logger.info("Changed to directory " + dir + " on remote server");
+            logger.info("Changed to directory " + newDir + " on remote server");
         else
-            logger.error("Failed to change to directory " + dir + " on remote server");
+            logger.error("Failed to change to directory " + newDir + " on remote server");
 
         return success;
     }
@@ -224,17 +236,19 @@ public class Client {
         }
 
         output.close();
-        logger.info("File" + file + " retrieved from the server!");
+        logger.info("File " + file + " retrieved from the server!");
         return true;
     }
 
     /**
      * This function uploads a files to the server
-     * @param file
+     * @param filename
      * @return
      * @throws IOException
      */
-    public boolean uploadFile(File file) throws IOException {
+    public boolean uploadFile(String filename) throws IOException {
+
+        File file = new File(filename);
 
         if(!file.exists()){
             logger.error("Passed File not created on local machine. It can't be upload to sever");
