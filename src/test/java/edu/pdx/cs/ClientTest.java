@@ -121,36 +121,20 @@ public class ClientTest {
 
     @Test
     public void testUploadFile() throws IOException{
-
-        String local = "upload_file.txt";
-        File file = new File(local);
-        assertThat(file.createNewFile(), equalTo(true));
-
-        FileWriter fw = new FileWriter(local);
-        fw.write("Testing File uploading to server");
-        fw.close();
-
-        file.deleteOnExit();
-
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-       assertThat(client.uploadFile(local), equalTo(true));
+        assertThat(client.uploadFile("README.md"), equalTo(true));
     }
 
     @Test
     public void testUploadFileNotExistLocally() throws IOException{
-
-        String local = "filenotexist.txt";
-        File file = new File(local);
-        file.deleteOnExit();
-
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-        assertThat(client.uploadFile(local), equalTo(false));
+        assertThat(client.uploadFile("filenotexist.txt"), equalTo(false));
     }
 
 

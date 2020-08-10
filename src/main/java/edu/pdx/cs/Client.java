@@ -251,19 +251,19 @@ public class Client {
         File file = new File(filename);
 
         if(!file.exists()){
-            logger.error("Passed File not created on local machine. It can't be upload to sever");
+            logger.error("File " + filename + " does not exist.");
             return false;
         }
 
         FileInputStream input = new FileInputStream(file);
 
         if((!ftp.storeFile(file.getName(), input))){
-            logger.error("File  " + file.getName() + " can't upload ");
+            logger.error("File  " + file.getName() + " can't upload.");
             return false;
         }
 
         input.close();
-        logger.info("File " + file.getName() + " uploaded ");
+        logger.info("File " + file.getName() + " uploaded.");
         return  true;
     }
 
