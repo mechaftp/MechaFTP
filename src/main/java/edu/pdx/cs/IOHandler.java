@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public class IOHandler {
-    private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private Validator validator = new Validator();
-    private ArgumentParser parser;
+    private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    private final ArgumentParser parser;
     private Namespace namespace;
     private List<String> tokens;
-    private Client client;
+    private final Client client;
     public boolean quitting;
 
 
@@ -28,23 +27,23 @@ public class IOHandler {
         parser = configureArgParser();
     }
 
-    private ArgumentParser configureArgParser()
-    {
+    private ArgumentParser configureArgParser() {
         ArgumentParser parse = ArgumentParsers.newFor("MechaFTP")
-            .addHelp(true)
-            .build()
-            .description("FTPClient for Agile");
-        parse.addArgument( "--login")
-            .nargs(2)
-            .help("--login username password");
+                .addHelp(true)
+                .build()
+                .description("FTPClient for Agile");
+        parse.addArgument("--login")
+                .nargs(2)
+                .help("--login username password");
         parse.addArgument("--quit")
-            .help("quit MechaFTP");
+                .help("quit MechaFTP");
 
         return parse;
     }
 
     /**
      * This should use argparse4j
+     *
      * @return Map<String, Object>
      * @throws IOException
      */
@@ -62,7 +61,6 @@ public class IOHandler {
         boolean isValid = false;
         switch (commandString) {
             case "--login":
-                isValid = this.validator.dummyValidate();
                 break;
         }
 
@@ -74,27 +72,20 @@ public class IOHandler {
 
     }
 
-    public void readInput()
-    {
-        try
-        {
+    public void readInput() {
+        try {
             String input = bufferedReader.readLine();
             this.tokens = List.of(input.split("\\s+"));
-        }
-        catch (IOException | NullPointerException e)
-        {
+        } catch (IOException | NullPointerException e) {
             this.tokens = List.of();
         }
     }
 
-    public Command parseInput()
-    {
+    public Command parseInput() {
         List<String> subarguments = tokens.subList(1, tokens.size());
         Command command;
-        try
-        {
-            switch (tokens.get(0).toLowerCase())
-            {
+        try {
+            switch (tokens.get(0).toLowerCase()) {
                 case "login":
                     command = CommandFactory.createLogin(client, subarguments);
                     break;
@@ -103,9 +94,7 @@ public class IOHandler {
                 default:
                     command = CommandFactory.createNull(client, subarguments);
             }
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             command = CommandFactory.createNull(client, subarguments);
         }

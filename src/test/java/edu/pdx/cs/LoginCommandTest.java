@@ -1,7 +1,7 @@
 package edu.pdx.cs;
+
 import edu.pdx.cs.commands.LoginCommand;
 import org.junit.Before;
-
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,8 +14,7 @@ public class LoginCommandTest {
     public static Client client;
 
     @Before
-    public void init() throws IOException
-    {
+    public void init() throws IOException {
         client = mock(Client.class);
         when(client.login("Bob", "password")).thenReturn(true);
     }
@@ -29,8 +28,7 @@ public class LoginCommandTest {
 //    }
 
     @Test(expected = IllegalArgumentException.class)
-    public void assignWrongNumberOfSubcommandsThrows()
-    {
+    public void assignWrongNumberOfSubcommandsThrows() {
         LoginCommand login = new LoginCommand(client, List.of("a", "b", "c"));
     }
 

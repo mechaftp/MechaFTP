@@ -1,12 +1,6 @@
 package edu.pdx.cs;
 
-import org.junit.After;
 import org.junit.Test;
-
-import java.nio.file.Paths;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class CLParseTest {
 
