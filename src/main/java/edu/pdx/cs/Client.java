@@ -226,7 +226,7 @@ public class Client {
         }
 
         output.close();
-        logger.info("File" + file + " retrieved from the server!");
+        logger.info("File " + file + " retrieved from the server!");
         return true;
     }
 

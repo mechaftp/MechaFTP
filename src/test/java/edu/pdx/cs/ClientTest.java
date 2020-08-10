@@ -126,7 +126,6 @@ public class ClientTest {
         File file = new File(local);
         file.createNewFile();
 
-
         FileWriter fw = new FileWriter(local);
         fw.write("Testing File uploading to server");
         fw.close();

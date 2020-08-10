@@ -34,7 +34,7 @@ public class CommandFactory {
     }
 
     public static Command createDownload(Client client, List<String> subarguments){
-        return new UploadCommand(client, subarguments);
+        return new DownloadCommand(client, subarguments);
     }
 
     public static Command createNull(Client client, List<String> subarguments)
