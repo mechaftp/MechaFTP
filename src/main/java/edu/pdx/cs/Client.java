@@ -264,9 +264,26 @@ public class Client {
 
         input.close();
         logger.info("File " + file.getName() + " uploaded ");
-        return  true;
+        return true;
     }
 
+    /**
+     * This function attempts to create a new directory on the server
+     * @param dirPath
+     * @return
+     */
+    public boolean createDirectory(String dirPath) throws IOException {
+
+        boolean created = ftp.makeDirectory(dirPath);
+
+        if (created) {
+            logger.info("Directory " + dirPath + " was created");
+            return true;
+        } else {
+            logger.error("Failed to create directory " + dirPath);
+            return false;
+        }
+    }
 
     /**
      * Logs the username off and outputs logging out message

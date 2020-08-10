@@ -154,6 +154,15 @@ public class ClientTest {
         assertThat(client.uploadFile(file), equalTo(false));
     }
 
+    @Test
+    public void testCreateDirectory() throws IOException{
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.createDirectory("/testDir/"), equalTo(true));
+    }
 
     @Test
     public void testLogoutSuccess() throws IOException{
@@ -167,7 +176,6 @@ public class ClientTest {
         assertTrue(client.logout("apple"));
         verify(logger).info("User apple is logging out!");
     }
-
 
     @Test
     public void testListDirectoriesLocal() throws IOException{
