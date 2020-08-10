@@ -137,7 +137,7 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-       assertThat(client.uploadFile(file), equalTo(true));
+       assertThat(client.uploadFile(local), equalTo(true));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class ClientTest {
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
-        assertThat(client.uploadFile(file), equalTo(false));
+        assertThat(client.uploadFile(local), equalTo(false));
     }
 
 

@@ -232,11 +232,13 @@ public class Client {
 
     /**
      * This function uploads a files to the server
-     * @param file
+     * @param filename
      * @return
      * @throws IOException
      */
-    public boolean uploadFile(File file) throws IOException {
+    public boolean uploadFile(String filename) throws IOException {
+
+        File file = new File(filename);
 
         if(!file.exists()){
             logger.error("Passed File not created on local machine. It can't be upload to sever");
