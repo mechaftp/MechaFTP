@@ -120,11 +120,11 @@ public class ClientTest {
 
 
     @Test
-    public void testuploadFile() throws IOException{
+    public void testUploadFile() throws IOException{
 
         String local = "upload_file.txt";
         File file = new File(local);
-        file.createNewFile();
+        assertThat(file.createNewFile(), equalTo(true));
 
 
         FileWriter fw = new FileWriter(local);
@@ -178,9 +178,8 @@ public class ClientTest {
         ArrayList<String> dirs = client.listDirectoriesLocal();
         StringBuilder allDirs = new StringBuilder();
         for(String dir:dirs)
-            allDirs.append(dir + "   ");
+            allDirs.append(dir).append("   ");
 
-        System.out.println(allDirs);
         assertThat(allDirs.toString(), containsString("target"));
         assertThat(allDirs.toString(), containsString(".mvn"));
         assertThat(allDirs.toString(), not(containsString("pom.xml")));
@@ -195,7 +194,7 @@ public class ClientTest {
         ArrayList<String> files = client.listFilesLocal();
         StringBuilder allFiles = new StringBuilder();
         for(String file:files)
-            allFiles.append(file + "   ");
+            allFiles.append(file).append("   ");
 
         assertThat(allFiles.toString(), not(containsString("target")));
         assertThat(allFiles.toString(), not(containsString(".mvn")));

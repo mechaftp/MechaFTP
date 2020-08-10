@@ -38,14 +38,4 @@ public class CommandFactory {
     {
         return new QuitCommand(client, subarguments);
     }
-
-    public static Command createRetrieveFile(Client client, List<String> subarguments)
-    {
-        return new RetrieveFileCommand(client, subarguments);
-    }
-
-    public static Command createUploadFile(Client client, List<String> subarguments)
-    {
-        return new UploadFileCommand(client, subarguments);
-    }
 }

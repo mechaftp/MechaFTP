@@ -4,8 +4,6 @@ import edu.pdx.cs.Client;
 import edu.pdx.cs.ClientState;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class LogoutCommand extends BaseCommand {

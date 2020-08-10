@@ -8,10 +8,10 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class IOHandler {
-    private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private Validator validator = new Validator();
+    private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    private final Validator validator = new Validator();
     public List<String> tokens;
-    private Client client;
+    private final Client client;
 
     IOHandler(Client client) {
         this.client = client;
@@ -58,12 +58,6 @@ public class IOHandler {
                     break;
                 case "quit":
                     command = CommandFactory.createQuit(client, subarguments);
-                    break;
-                case "retrieveFile":
-                    command = CommandFactory.createRetrieveFile(client, subarguments);
-                    break;
-                case "uploadFile":
-                    command = CommandFactory.createUploadFile(client, subarguments);
                     break;
                 default:
                     client.state.output("Invalid Command");

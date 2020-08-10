@@ -1,25 +1,24 @@
 package edu.pdx.cs;
 
-import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFileFilter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.nio.file.Paths;
-import java.io.File;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 
 public class Client {
 
-    private static Logger logger;
-    public ClientState state;
-    FTPClient ftp;
+    public final ClientState state;
+
+    private final Logger logger;
+    private final FTPClient ftp;
 
     Client(){
         logger =  LogManager.getLogger(Client.class);
@@ -50,7 +49,7 @@ public class Client {
         catch (IOException e)
         {
             logger.error("Failed to connect to server " + server + " with error:\n" + e.getLocalizedMessage());
-            state.setRemoteCwd(Path.of(""));
+            state.setRemoteCwd(null);
         }
 
     }

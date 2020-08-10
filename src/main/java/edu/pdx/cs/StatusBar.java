@@ -1,13 +1,15 @@
 package edu.pdx.cs;
 
+import org.fusesource.jansi.AnsiConsole;
+
 import java.io.Closeable;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
-import org.fusesource.jansi.AnsiConsole;
-import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class StatusBar implements Closeable
 {
