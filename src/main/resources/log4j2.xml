@@ -9,14 +9,12 @@
             <Pattern>%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Pattern>
         </PatternLayout>
     </File>
-    <Async name="Async">
-        <AppenderRef ref="fout"/>
-    </Async>
+
 </Appenders>
 <Loggers>
-    <Root level="error">
-        <AppenderRef ref="stdout" />
-    </Root>
+    <AsyncRoot level="DEBUG">
+        <AppenderRef ref="fout"/>
+    </AsyncRoot>
 </Loggers>
 </Configuration>
 
