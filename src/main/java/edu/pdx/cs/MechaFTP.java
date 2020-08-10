@@ -92,7 +92,7 @@ public class MechaFTP
             }
             commands.clear();
 
-        } while (!ioHandler.quitting);
+        } while (!client.state.isQuitting());
     }
 
     private static void cleanup()

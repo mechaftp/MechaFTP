@@ -12,8 +12,6 @@ public class IOHandler {
     private Validator validator = new Validator();
     public List<String> tokens;
     private Client client;
-    public boolean quitting;
-
 
     IOHandler(Client client) {
         this.client = client;
@@ -59,7 +57,8 @@ public class IOHandler {
                     command = CommandFactory.createListLocalFiles(client, subarguments);
                     break;
                 case "quit":
-                    quitting = true;
+                    command = CommandFactory.createQuit(client, subarguments);
+                    break;
                 default:
                     client.state.output("Invalid Command");
                     command = CommandFactory.createNull(client, subarguments);
@@ -67,7 +66,7 @@ public class IOHandler {
         }
         catch (IllegalArgumentException e)
         {
-            System.err.println(e.getMessage());
+            client.state.output(e.getMessage());
             command = CommandFactory.createNull(client, subarguments);
         }
 

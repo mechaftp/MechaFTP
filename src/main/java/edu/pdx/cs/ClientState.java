@@ -10,7 +10,9 @@ public class ClientState
     private Path localCwd;
     private Path remoteCwd;
     private boolean loggedIn;
+    private boolean quitting;
     private Path logFileLocation;
+
     private ArrayList<String> commandOutput = new ArrayList<>();
 
     public ClientState()
@@ -40,7 +42,9 @@ public class ClientState
 
     public String getRemoteCwdString()
     {
-        return remoteCwd.toAbsolutePath().toString();
+        return remoteCwd == null ?
+            "not logged in" :
+            remoteCwd.toAbsolutePath().toString();
     }
 
     public void setRemoteCwd(Path remoteCwd)
@@ -76,4 +80,14 @@ public class ClientState
     }
 
     public void output(String line) { commandOutput.add(line); }
+
+    public void setQuitting()
+    {
+        this.quitting = true;
+    }
+
+    public boolean isQuitting()
+    {
+        return this.quitting;
+    }
 }

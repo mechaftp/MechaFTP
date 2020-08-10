@@ -33,4 +33,9 @@ public class CommandFactory {
     {
         return new NullCommand(client, subarguments);
     }
+
+    public static Command createQuit(Client client, List<String> subarguments)
+    {
+        return new QuitCommand(client, subarguments);
+    }
 }

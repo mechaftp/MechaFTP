@@ -37,8 +37,6 @@ public class Client {
                 ftp.connect(server, port);
             else
                 ftp.connect(server);
-            // TODO: state.setRemoteCwd to the current working directory on server
-            state.setRemoteCwd(Paths.get("not logged in"));
         }
         catch (IOException e)
         {

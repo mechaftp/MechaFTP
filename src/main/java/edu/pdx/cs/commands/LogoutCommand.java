@@ -29,6 +29,7 @@ public class LogoutCommand extends BaseCommand {
             if (result)
             {
                 state.output("Logged out of server as " + username + ".");
+                state.setRemoteCwd(null);
             }
             else
                 state.output("Failed to logout of server with username " + username + ".");
