@@ -1,12 +1,20 @@
 package edu.pdx.cs;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+
 import org.mockftpserver.fake.FakeFtpServer;
 import java.util.ArrayList;
 
@@ -95,6 +103,72 @@ public class ClientTest {
         assertThat(client.changeDirectory("testDir"), equalTo(true));
     }
 
+
+    @Test
+    public void testRetrieveFileMethod() throws IOException {
+
+        String remote = "love_note";
+        File momo = new File(remote);
+        momo.deleteOnExit();
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.retrieveFile(remote), equalTo(true));
+    }
+
+
+    @Test
+    public void testuploadFile() throws IOException{
+
+        String local = "upload_file.txt";
+        File file = new File(local);
+        file.createNewFile();
+
+
+        FileWriter fw = new FileWriter(local);
+        fw.write("Testing File uploading to server");
+        fw.close();
+
+        file.deleteOnExit();
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+       assertThat(client.uploadFile(file), equalTo(true));
+    }
+
+    @Test
+    public void testUploadFileNotExistLocally() throws IOException{
+
+        String local = "filenotexist.txt";
+        File file = new File(local);
+        file.deleteOnExit();
+
+        Client client = new Client();
+        client.connect(HOSTNAME, Integer.parseInt(PORT));
+        client.login("aang", "katara");
+
+        assertThat(client.uploadFile(file), equalTo(false));
+    }
+
+
+    @Test
+    public void testLogoutSuccess() throws IOException{
+        Logger logger = mock(Logger.class);
+        FTPClient ftp = mock(FTPClient.class);
+        ClientState state = mock(ClientState.class);
+        when(ftp.logout()).thenReturn(true);
+
+        Client client = new Client(logger, ftp, state);
+
+        assertTrue(client.logout("apple"));
+        verify(logger).info("User apple is logging out!");
+    }
+
+
     @Test
     public void testListDirectoriesLocal() throws IOException{
         Client client = new Client();
@@ -106,7 +180,6 @@ public class ClientTest {
         for(String dir:dirs)
             allDirs.append(dir + "   ");
 
-        System.out.println(allDirs);
         assertThat(allDirs.toString(), containsString("target"));
         assertThat(allDirs.toString(), containsString(".mvn"));
         assertThat(allDirs.toString(), not(containsString("pom.xml")));

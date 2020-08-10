@@ -72,11 +72,11 @@ public class MechaFTP
         ioHandler = new IOHandler(client);
         statusBar = StatusBar.create(out);
 
-        if (ns.get("logfile") != null && !validator.validatePath(ns.get("logfile"))) {
-            System.err.println("Invalid log argument");
-        } else {
-            client.state.setLogFile(Paths.get((String) ns.get("logfile")));
-        }
+//        if (ns.get("logfile") != null && !validator.validatePath(ns.get("logfile"))) {
+//            System.err.println("Invalid log argument");
+//        } else {
+//            client.state.setLogFile(Paths.get((String) ns.get("logfile")));
+//        }
     }
 
     private static void run()

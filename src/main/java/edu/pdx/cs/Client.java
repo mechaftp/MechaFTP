@@ -2,12 +2,14 @@ package edu.pdx.cs;
 
 import org.apache.commons.net.ftp.*;
 import org.apache.commons.net.ftp.FTPClient;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.nio.file.Paths;
 import java.io.File;
 
+import org.apache.commons.net.io.Util;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -22,6 +24,12 @@ public class Client {
         logger =  LogManager.getLogger(Client.class);
         ftp = new FTPClient();
         state = new ClientState();
+    }
+
+    Client(Logger logger, FTPClient ftp, ClientState state){
+        this.logger = logger;
+        this.ftp = ftp;
+        this.state = state;
     }
 
     public void connect(String server, int port)
@@ -82,7 +90,7 @@ public class Client {
                 logger.info("Directory " + dir.getName() + " from remote server added to list");
             }
         }
-        
+
         return directories;
     }
 
@@ -202,10 +210,61 @@ public class Client {
         return fileNames;
     }
 
+    /**
+     * This function retrieves a file from the server.
+     * @param file file name in the remote server
+     * @return
+     * @throws IOException
+     */
+    public boolean retrieveFile(String file)throws IOException{
+        FileOutputStream output = new FileOutputStream(file);
+
+        if(!ftp.retrieveFile(file, output))
+        {
+            logger.error("Can't download file!");
+            return false;
+        }
+
+        output.close();
+        logger.info("File" + file + " retrieved from the server!");
+        return true;
+    }
+
+    /**
+     * This function uploads a files to the server
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public boolean uploadFile(File file) throws IOException {
+
+        if(!file.exists()){
+            logger.error("Passed File not created on local machine. It can't be upload to sever");
+            return false;
+        }
+
+        FileInputStream input = new FileInputStream(file);
+
+        if((!ftp.storeFile(file.getName(), input))){
+            logger.error("File  " + file.getName() + " can't upload ");
+            return false;
+        }
+
+        input.close();
+        logger.info("File " + file.getName() + " uploaded ");
+        return  true;
+    }
+
+
+    /**
+     * Logs the username off and outputs logging out message
+     * @param username
+     * @return
+     * @throws IOException
+     */
     public boolean logout(String username)throws IOException{
         logger.info("User " + username +" is logging out!");
         return ftp.logout();
-        //ftp.disconnect();
 
     }
 
