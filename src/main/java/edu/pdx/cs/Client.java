@@ -149,7 +149,7 @@ public class Client {
      * @return true if the path change was successful, false otherwise
      */
 
-    public boolean changeDirectory(String dir){
+    public boolean changeDirectory(String newDir){
         boolean success = false;
 
         //get relative name of current directory
