@@ -66,6 +66,9 @@ public class IOHandler {
                 case "uploadFile":
                     command = CommandFactory.createUpload(client, subarguments);
                     break;
+                case "downloadFile":
+                    command = CommandFactory.createDownload(client, subarguments);
+                    break;
                 case "quit":
                     quitting = true;
                 default:
