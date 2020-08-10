@@ -29,6 +29,10 @@ public class CommandFactory {
         return new ListLocalFilesCommand(client, subarguments);
     }
 
+    public static Command createUpload(Client client, List<String> subarguments){
+        return new UploadCommand(client, subarguments);
+    }
+
     public static Command createNull(Client client, List<String> subarguments)
     {
         return new NullCommand(client, subarguments);
