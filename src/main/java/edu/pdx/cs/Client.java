@@ -125,7 +125,7 @@ public class Client {
      * @return <code>ArrayList</code> of names in <code>String</code> format
      */
     public ArrayList<String> fileDirectoryListStrings(FTPFile[] files){
-       ArrayList<String> names = null;
+       ArrayList<String> names = new ArrayList<>();
 
        for(FTPFile file:files)
            names.add(file.getName());
@@ -238,17 +238,19 @@ public class Client {
         }
 
         output.close();
-        logger.info("File" + file + " retrieved from the server!");
+        logger.info("File " + file + " retrieved from the server!");
         return true;
     }
 
     /**
      * This function uploads a files to the server
-     * @param file
+     * @param filename
      * @return
      * @throws IOException
      */
-    public boolean uploadFile(File file) throws IOException {
+    public boolean uploadFile(String filename) throws IOException {
+
+        File file = new File(filename);
 
         if(!file.exists()){
             logger.error("Passed File not created on local machine. It can't be upload to sever");
