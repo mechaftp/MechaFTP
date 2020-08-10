@@ -14,19 +14,15 @@ public class UploadCommand extends BaseCommand {
     }
 
     @Override
-    public boolean execute(ClientState state)
-    {
+    public boolean execute(ClientState state) {
         if (!state.getLoggedIn()) {
             state.output("User is not logged in. Please log in to continue.");
         }
-        try
-        {
+        try {
             state.output("Uploading File...");
             String filename = arguments.get(0);
             return client.uploadFile(filename);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             return false;
         }
     }

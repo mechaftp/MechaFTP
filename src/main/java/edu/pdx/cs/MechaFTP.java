@@ -7,25 +7,20 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class MechaFTP
-{
+public class MechaFTP {
     public static PrintStream out;
 
     private static StatusBar statusBar;
     private static IOHandler ioHandler;
     private static Client client;
-    private static Validator validator;
-    private static BlockingQueue<Command> blockingQueue = new LinkedBlockingDeque<>();
+    private static final BlockingQueue<Command> blockingQueue = new LinkedBlockingDeque<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         startup(args);
 
         run();
@@ -33,40 +28,36 @@ public class MechaFTP
         cleanup();
     }
 
-    private static void startup(String[] args) throws IOException {
+    private static void startup(String[] args) {
         ArgumentParser parser = ArgumentParsers
-            .newFor("MechaFTP")
-            .build()
-            .version("${prog} v0.1.0");
+                .newFor("MechaFTP")
+                .build()
+                .version("${prog} v0.1.0");
         parser.addArgument("host")
-            .help("Host FTP server to open a connection with.");
+                .help("Host FTP server to open a connection with.");
         parser.addArgument("port")
-            .type(Integer.class)
-            .nargs("?")
-            .help("Port on the host to connect to");
+                .type(Integer.class)
+                .nargs("?")
+                .help("Port on the host to connect to");
         parser.addArgument("--version")
-            .action(Arguments.version());
+                .action(Arguments.version());
         parser.addArgument("--output")
-            .help("Set the output destination")
-            .type(PrintStream.class)
-            .nargs("?")
-            .setDefault(System.out);
+                .help("Set the output destination")
+                .type(PrintStream.class)
+                .nargs("?")
+                .setDefault(System.out);
         parser.addArgument("-l", "--logfile")
-            .setDefault("Logs/")
-            .help("set the location of the log files");
+                .setDefault("Logs/")
+                .help("set the location of the log files");
 
         Namespace ns = null;
-        try
-        {
+        try {
             ns = parser.parseArgs(args);
-        }
-        catch (ArgumentParserException e)
-        {
+        } catch (ArgumentParserException e) {
             parser.handleError(e);
             System.exit(1);
         }
 
-        validator = new Validator();
         client = new Client();
         client.connect(ns.get("host"), ns.get("port"));
         out = ns.get("output");
@@ -74,12 +65,10 @@ public class MechaFTP
         statusBar = StatusBar.create(out);
     }
 
-    private static void run()
-    {
+    private static void run() {
         Command command;
         ArrayList<Command> commands = new ArrayList<>();
-        do
-        {
+        do {
             // statusBar will use client state to output to user
             statusBar.render(client.state);
 
@@ -97,8 +86,7 @@ public class MechaFTP
         } while (!client.state.isQuitting());
     }
 
-    private static void cleanup()
-    {
+    private static void cleanup() {
         statusBar.close();
         // Write logs to file???
     }

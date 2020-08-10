@@ -8,34 +8,27 @@ import java.util.List;
 
 public class LogoutCommand extends BaseCommand {
 
-    public LogoutCommand(Client client, List<String> arguments)
-    {
+    public LogoutCommand(Client client, List<String> arguments) {
         super(client, arguments);
         expectNSubarguments(1);
     }
 
     @Override
-    public boolean execute(ClientState state)
-    {
+    public boolean execute(ClientState state) {
         String username = arguments.get(0);
         if (username == null)
             throw new IllegalStateException("Attempted execution before assigning input.");
-        try
-        {
+        try {
             boolean result = client.logout(username);
             state.setLoggedIn(!result);
-            if (result)
-            {
+            if (result) {
                 state.output("Logged out of server as " + username + ".");
                 state.setRemoteCwd(null);
-            }
-            else
+            } else
                 state.output("Failed to logout of server with username " + username + ".");
 
             return result;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             return false;
         }
     }

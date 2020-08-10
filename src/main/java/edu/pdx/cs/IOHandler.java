@@ -9,7 +9,6 @@ import java.util.List;
 
 public class IOHandler {
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private final Validator validator = new Validator();
     public List<String> tokens;
     private final Client client;
 
@@ -17,27 +16,20 @@ public class IOHandler {
         this.client = client;
     }
 
-    public void readInput()
-    {
-        try
-        {
+    public void readInput() {
+        try {
             String input = bufferedReader.readLine();
             this.tokens = List.of(input.split("\\s+"));
-        }
-        catch (IOException | NullPointerException e)
-        {
+        } catch (IOException | NullPointerException e) {
             this.tokens = List.of();
         }
     }
 
-    public Command parseInput()
-    {
+    public Command parseInput() {
         List<String> subarguments = tokens.subList(1, tokens.size());
         Command command;
-        try
-        {
-            switch (tokens.get(0))
-            {
+        try {
+            switch (tokens.get(0)) {
                 case "login":
                     command = CommandFactory.createLogin(client, subarguments);
                     break;
@@ -69,9 +61,7 @@ public class IOHandler {
                     client.state.output("Invalid Command");
                     command = CommandFactory.createNull(client, subarguments);
             }
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             client.state.output(e.getMessage());
             command = CommandFactory.createNull(client, subarguments);
         }

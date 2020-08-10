@@ -9,7 +9,6 @@
             <Pattern>%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Pattern>
         </PatternLayout>
     </File>
-
 </Appenders>
 <Loggers>
     <AsyncRoot level="DEBUG">

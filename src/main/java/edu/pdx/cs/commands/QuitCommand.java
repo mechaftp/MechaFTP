@@ -5,17 +5,14 @@ import edu.pdx.cs.ClientState;
 
 import java.util.List;
 
-public class QuitCommand extends BaseCommand
-{
-    public QuitCommand(Client client, List<String> subarguments)
-    {
+public class QuitCommand extends BaseCommand {
+    public QuitCommand(Client client, List<String> subarguments) {
         super(client, subarguments);
         expectNSubarguments(0);
     }
 
     @Override
-    public boolean execute(ClientState state)
-    {
+    public boolean execute(ClientState state) {
         state.setQuitting();
         return true;
     }

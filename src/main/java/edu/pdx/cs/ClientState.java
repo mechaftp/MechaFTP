@@ -4,90 +4,62 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class ClientState
-{
+public class ClientState {
 
-    private Path localCwd;
+    private final Path localCwd;
     private Path remoteCwd;
     private boolean loggedIn;
     private boolean quitting;
-    private Path logFileLocation;
 
-    private ArrayList<String> commandOutput = new ArrayList<>();
+    private final ArrayList<String> commandOutput = new ArrayList<>();
 
-    public ClientState()
-    {
+    public ClientState() {
         this.localCwd = Paths.get(System.getProperty("user.dir"));
     }
 
-    public Path getLocalCwd()
-    {
+    public Path getLocalCwd() {
         return localCwd;
     }
 
-    public String getLocalCwdString()
-    {
+    public String getLocalCwdString() {
         return localCwd.toAbsolutePath().toString();
     }
 
-    public void setLocalCwd(Path localCwd)
-    {
-        this.localCwd = localCwd;
-    }
-
-    public Path getRemoteCwd()
-    {
-        return remoteCwd;
-    }
-
-    public String getRemoteCwdString()
-    {
+    public String getRemoteCwdString() {
         return remoteCwd == null ?
-            "not logged in" :
-            remoteCwd.toAbsolutePath().toString();
+                "not logged in" :
+                remoteCwd.toAbsolutePath().toString();
     }
 
-    public void setRemoteCwd(Path remoteCwd)
-    {
+    public void setRemoteCwd(Path remoteCwd) {
         this.remoteCwd = remoteCwd;
     }
 
-    public boolean getLoggedIn()
-    {
+    public boolean getLoggedIn() {
         return this.loggedIn;
     }
 
-    public void setLoggedIn(boolean loggedIn)
-    {
+    public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
 
-    public void setLogFile(Path logpath)
-    {
-        this.logFileLocation = logpath;
-    }
-
-    public Path getLogFilePath() { return this.logFileLocation; }
-
-    public ArrayList<String> getCommandOutput()
-    {
+    public ArrayList<String> getCommandOutput() {
         return commandOutput;
     }
 
-    public void clearCommandOutput()
-    {
+    public void clearCommandOutput() {
         commandOutput.clear();
     }
 
-    public void output(String line) { commandOutput.add(line); }
+    public void output(String line) {
+        commandOutput.add(line);
+    }
 
-    public void setQuitting()
-    {
+    public void setQuitting() {
         this.quitting = true;
     }
 
-    public boolean isQuitting()
-    {
+    public boolean isQuitting() {
         return this.quitting;
     }
 }
