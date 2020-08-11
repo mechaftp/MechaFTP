@@ -2,9 +2,7 @@ package edu.pdx.cs.commands;
 
 import edu.pdx.cs.Client;
 import edu.pdx.cs.ClientState;
-import org.apache.commons.net.ftp.FTPFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -16,13 +16,11 @@ public class ListRemoteFileCommand extends BaseCommand {
     }
 
     @Override
-    public boolean execute(ClientState state)
-    {
+    public boolean execute(ClientState state) {
         if (!state.getLoggedIn()) {
             state.output("User is not logged in. Please log in to continue.");
         }
-        try
-        {
+        try {
             state.output("Retrieving file information...");
             FTPFile[] dirs = client.listRemoteFiles();
             ArrayList<String> fileNames = client.fileDirectoryListStrings(dirs);
@@ -31,9 +29,7 @@ public class ListRemoteFileCommand extends BaseCommand {
                 state.output(fileName);
             }
             return true;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             return false;
         }
     }

@@ -1,23 +1,19 @@
 package edu.pdx.cs;
 
 import edu.pdx.cs.commands.Command;
-import edu.pdx.cs.commands.LoginCommand;
-import org.apache.commons.net.ftp.FTPFile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.mockftpserver.fake.FakeFtpServer;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.mockftpserver.fake.FakeFtpServer;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 public class CommandTests {
@@ -25,8 +21,6 @@ public class CommandTests {
     private FakeFtpServer server;
     private static final String HOSTNAME = "localhost";
     private static final String PORT = System.getProperty("http.port", "8080");
-    private static final CommandFactory commandFactory = new CommandFactory();
-
 
 
     @Before
@@ -43,7 +37,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testLoginCommand() throws IOException {
+    public void testLoginCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -60,7 +54,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testLogoutCommand() throws IOException {
+    public void testLogoutCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -84,7 +78,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testListRemoteDirCommand() throws IOException {
+    public void testListRemoteDirCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -104,7 +98,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testListRemoteFilesCommand() throws IOException {
+    public void testListRemoteFilesCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -124,7 +118,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testListLocalDirsCommand() throws IOException {
+    public void testListLocalDirsCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -144,7 +138,7 @@ public class CommandTests {
     }
 
     @Test
-    public void testListLocalFilesCommand() throws IOException {
+    public void testListLocalFilesCommand() {
         String username = "aang";
         String password = "katara";
 
@@ -167,9 +161,9 @@ public class CommandTests {
     public void testUploadCommand() throws IOException {
         String username = "aang";
         String password = "katara";
-        String local = "upload_file.txt";
+        String local = "upload_file3.txt";
         File file = new File(local);
-        file.createNewFile();
+        assertTrue(file.createNewFile());
 
         FileWriter fw = new FileWriter(local);
         fw.write("Testing File uploading to server");
@@ -197,9 +191,9 @@ public class CommandTests {
     public void testDownloadCommand() throws IOException {
         String username = "aang";
         String password = "katara";
-        String local = "upload_file.txt";
+        String local = "upload_file2.txt";
         File file = new File(local);
-        file.createNewFile();
+        assertTrue(file.createNewFile());
 
         FileWriter fw = new FileWriter(local);
         fw.write("Testing File uploading to server");

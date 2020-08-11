@@ -5,14 +5,15 @@ import edu.pdx.cs.ClientState;
 
 import java.util.List;
 
-public class NullCommand extends BaseCommand {
-    public NullCommand(Client client, List<String> subarguments) {
+public class QuitCommand extends BaseCommand {
+    public QuitCommand(Client client, List<String> subarguments) {
         super(client, subarguments);
+        expectNSubarguments(0);
     }
 
     @Override
     public boolean execute(ClientState state) {
-        state.output("Executed the Null command.");
+        state.setQuitting();
         return true;
     }
 }
