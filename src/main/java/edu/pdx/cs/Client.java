@@ -51,7 +51,7 @@ public class Client {
         catch (IOException e)
         {
             logger.error("Failed to connect to server " + server + " with error:\n" + e.getLocalizedMessage());
-            state.setRemoteCwd(Path.of(""));
+            state.setRemoteCwd(null);
         }
 
     }
