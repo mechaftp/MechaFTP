@@ -6,17 +6,17 @@ import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import org.mockftpserver.fake.FakeFtpServer;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.mockftpserver.fake.FakeFtpServer;
 import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 
 // This should probably be refactored into a different name
@@ -33,12 +33,12 @@ public class ClientTest {
     }
 
     @Test
-    public void testGetServerControlPort(){
+    public void testGetServerControlPort() {
         assertThat(server.getServerControlPort(), equalTo(Integer.parseInt(PORT)));
     }
 
     @Test
-    public void testGetUserInfo(){
+    public void testGetUserInfo() {
         String username = "aang";
         String password = "katara";
 
@@ -58,7 +58,7 @@ public class ClientTest {
     }
 
     @Test
-    public void testListRemoteFiles() throws IOException{
+    public void testListRemoteFiles() throws IOException {
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
@@ -86,7 +86,7 @@ public class ClientTest {
     }
 
     @Test
-    public void testPrintWorkingDirectory() throws IOException{
+    public void testPrintWorkingDirectory() throws IOException {
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("bumi", "password");
@@ -165,7 +165,7 @@ public class ClientTest {
     }
 
     @Test
-    public void testLogoutSuccess() throws IOException{
+    public void testLogoutSuccess() throws IOException {
         Logger logger = mock(Logger.class);
         FTPClient ftp = mock(FTPClient.class);
         ClientState state = mock(ClientState.class);
@@ -177,16 +177,17 @@ public class ClientTest {
         verify(logger).info("User apple is logging out!");
     }
 
+
     @Test
-    public void testListDirectoriesLocal() throws IOException{
+    public void testListDirectoriesLocal() throws IOException {
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
         ArrayList<String> dirs = client.listDirectoriesLocal();
         StringBuilder allDirs = new StringBuilder();
-        for(String dir:dirs)
-            allDirs.append(dir + "   ");
+        for (String dir : dirs)
+            allDirs.append(dir).append("   ");
 
         assertThat(allDirs.toString(), containsString("target"));
         assertThat(allDirs.toString(), containsString(".mvn"));
@@ -194,15 +195,15 @@ public class ClientTest {
     }
 
     @Test
-    public void testListFilesLocal() throws IOException{
+    public void testListFilesLocal() throws IOException {
         Client client = new Client();
         client.connect(HOSTNAME, Integer.parseInt(PORT));
         client.login("aang", "katara");
 
         ArrayList<String> files = client.listFilesLocal();
         StringBuilder allFiles = new StringBuilder();
-        for(String file:files)
-            allFiles.append(file + "   ");
+        for (String file : files)
+            allFiles.append(file).append("   ");
 
         assertThat(allFiles.toString(), not(containsString("target")));
         assertThat(allFiles.toString(), not(containsString(".mvn")));
