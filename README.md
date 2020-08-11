@@ -6,15 +6,36 @@ Portable Java FTP command line client created for Agile and Open Source Software
 
 ## Getting started
 
-To work with the current client, you will need to compile from source.
+To work with the current client, you will need to compile from source code. This project uses the Maven Wrapper to bootstrap 
+dependency installation. It's executed through `mvnw` in the root project directory.
 
 1. Clone the repo to a location of your choosing.
 2. In the central directory, build the project with `./mvnw package`. You may need to add executable file permissions
 to the maven wrapper `mvnw` in order for that to work.
+3. Tests run as a part of the package goal. If you want to run the tests independently, execute `./mvnw test`.
 3. Launch the client with the provided executable jar file `java -jar target/mechaftp-0.1.0.jar`. You must give a hostname
 as a command line argument in order to connect. If the port isn't a default port, you can specify it as well:
 
     `java -jar target/mechaftp-0.1.0.jar <hostname> [port]`
+
+## Usage
+
+The project has several FTP commands implemented. As we build out the project, this section will be added to. When the
+program launches, it will connect to the given hostname (and port, if given, otherwise the default FTP port will be
+used). After connection, you still need to log in to the server via the login command.
+
+1. `downloadFile <filepath>` - download the file given by `<filepath>` relative to the current working directory on
+the remote server.
+2. `listLocalDirectories` - list the directories within the current working directory on your local machine.
+3. `listLocalFiles` - list the non-directory files within the current working directory on your local machine.
+4. `listRemoteDirectory` - list the directories within the current working directory on the remote machine.
+5. `listRemoteFiles` - list the non-directory files within the current working directory on the remote machine.
+6. `login <username> <password>` - attempt to log in to the connected server with the `<username>` and `<password>`
+combination supplied.
+7. `logout` - log out of the currently connected server.
+8. `quit` - exit the currently running program.
+9. `uploadFile <filepath>` - upload the file given by `<filepath>` relative to the local current working directory on
+your machine to the current working directory on the remote server.
 
 ## Contributing
 
