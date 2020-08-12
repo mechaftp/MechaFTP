@@ -30,7 +30,7 @@ public class StatusBar implements Closeable {
         out.println();
 
         // Hack for Windows failure to parse ANSI codes
-        if (System.getProperty("os.name").toLowerCase().contains("win"))
+        if (System.getProperty("os.name").toLowerCase().contains("windows"))
             renderWindows(state);
         else
             renderOtherOS(state);
@@ -58,9 +58,9 @@ public class StatusBar implements Closeable {
         out.println("╠ [local] " + formatStatusBar(state) + " [remote] ╗");
 
         // print the command prompt
-        out.print(ansi().fgCyan().a("╚").reset().a(" mechaftp > ").reset());
-
+        out.print("╚ mechaftp > ");
     }
+
 
     /**
      * StatusBar output suited for non-Windows terminals that can handle ANSI formatting (prettier)
